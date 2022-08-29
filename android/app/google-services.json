@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "592184472687",
+    "project_id": "hall-of-legends",
+    "storage_bucket": "hall-of-legends.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:592184472687:android:112babc8c02d794600899a",
+        "android_client_info": {
+          "package_name": "com.example.hall_of_legends"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "592184472687-54f6e83047hnnp76g8pejj0j8lr0m125.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTiEatQYdU9ELtCdjKVAhsIk9YhwgLsUk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "592184472687-54f6e83047hnnp76g8pejj0j8lr0m125.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
