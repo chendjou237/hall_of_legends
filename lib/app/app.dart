@@ -16,7 +16,7 @@ class App extends ConsumerWidget {
 
     return MaterialApp.router(
       // TODO: add your app name here
-      title: 'Hall Of Legends',
+      title: 'Hello World',
       // TODO: add your localization here
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,

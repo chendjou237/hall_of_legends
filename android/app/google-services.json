@@ -29,6 +29,13 @@
             {
               "client_id": "592184472687-54f6e83047hnnp76g8pejj0j8lr0m125.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "592184472687-bucofgmfb7dqemof26tsi3tuh0p43vvk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.hallOfLegends"
+              }
             }
           ]
         }
