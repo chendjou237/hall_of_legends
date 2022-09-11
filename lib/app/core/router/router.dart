@@ -14,7 +14,7 @@ final routerProvider = Provider<GoRouter>(
         /// for showing onboarding
         GoRoute(
           path: MainView.routeName,
-          builder: (context, state) => const MainView(),
+          builder: (context, state) =>  MainView(),
         ),
       ],
     );

@@ -1,7 +1,9 @@
 {
+  "formulaireDeNomination" :"FORMULAIRE DE NOMINATION",
+  
     "nomDuCandidat":"Nom du candidat",
 
-    "nomsEtPrénoms":"Nom(s) et Prénom(s)",
+    "nomsEtPrenoms":"Nom(s) et Prénom(s)",
 
     "titreOuProfession":"Titre ou Profession",
 
@@ -20,6 +22,11 @@
    "biographieDuCandidat": "Biographie du candidat",
 
    "max250Caracteres" : "max 250 caractères",
+
+    "selectionnerVotreLienAvecLeCandidat":"Sélectionner votre lien avec le candidat",  
+    
+    "selectionnerVotrePays": "Sélectionner votre pays",
+
 
    "candidatureSoumisePar" :"Candidature soumise par",
 

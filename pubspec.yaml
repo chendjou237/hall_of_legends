@@ -88,6 +88,7 @@ flutter:
     - family: Gotham
       fonts:
         - asset: assets/fonts/GOTHAM-BLACK.TTF 
+        
         - asset: assets/fonts/GOTHAM-BOLD.TTF 
         - asset: assets/fonts/Gotham-Book.otf 
         - asset: assets/fonts/Gotham-ExtraLight.otf 
@@ -95,6 +96,7 @@ flutter:
         - asset: assets/fonts/Gotham-Light.otf 
         - asset: assets/fonts/Gotham-LightItalic.otf 
         - asset: assets/fonts/Gotham-Medium.otf 
+          weight: 500
         - asset: assets/fonts/GOTHAM-MEDIUM.TTF 
         - asset: assets/fonts/GOTHAM-ULTRA.TTF
     - family: Centaur
