@@ -1,0 +1,58 @@
+{
+  "formulaireDeNomination" :"FORMULAIRE DE NOMINATION",
+  
+    "nomDuCandidat":"Nom du candidat",
+
+    "nomsEtPrenoms":"Nom(s) et Prénom(s)",
+
+    "titreOuProfession":"Titre ou Profession",
+
+    "selectionnerLeDomaineDeRealisation":"Sélectionner le domaine de réalisation",
+
+   "dateDeNaissanceDuCandidat" :"Date de Naissance du candidat",
+
+   "jour" : "Jour",
+
+   "mois" : "Mois",
+
+   "annee" : "Année",
+
+   "dateDeDecesDuCandidatLeCasEcheant": "Date de Décès du candidat (le cas échéant)",
+
+   "biographieDuCandidat": "Biographie du candidat",
+
+   "max250Caracteres" : "max 250 caractères",
+
+    "selectionnerVotreLienAvecLeCandidat":"Sélectionner votre lien avec le candidat",  
+    
+    "selectionnerVotrePays": "Sélectionner votre pays",
+
+
+   "candidatureSoumisePar" :"Candidature soumise par",
+
+   "dateDenregistrement" : "Date d’enregistrement",
+
+   "lienAvecLeCandidat" : "Lien avec le candidat",
+
+   "votrePays":  "Votre pays",
+
+   "numeroDeTelephone": "Numéro de téléphone",
+
+   "veuillezEntrerVotreNumeroDeTelephone": "Veuillez entrer votre numéro de téléphone",
+
+   "confirmerLeNumeroDeTelephone" : "Confirmer le numéro de téléphone",
+
+   "veuillezConfirmerVotreNumeroDeTelephone":"Veuillez confirmer votre numéro de téléphone",
+
+   "adresseEmail": "Adresse e-mail",
+
+  "veuillezEntrerVotreAdresseEmail": "Veuillez entrer votre adresse e-mail",
+
+  "confirmerLadresseMail": "Confirmer l’adresse mail",
+
+  "veuillezConfirmerVotreAdresseEmail":"Veuillez confirmer votre adresse e-mail",
+
+  "enregistrerEtEnvoyer": "ENREGISTRER ET ENVOYER"
+
+
+}
