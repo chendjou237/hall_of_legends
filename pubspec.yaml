@@ -47,6 +47,10 @@ dependencies:
   hooks_riverpod: ^1.0.4
   flutter_screenutil: ^5.5.3+2
   flutter_native_splash: ^2.2.8
+  queen_validators: ^1.0.0
+  fluttertoast: ^8.0.9
+  intl_phone_field: ^3.1.0
+  country_pickers: ^2.0.0
 
 dev_dependencies:
   # The "flutter_lints" package below contains a set of recommended lints to

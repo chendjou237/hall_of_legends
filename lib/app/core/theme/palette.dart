@@ -7,4 +7,6 @@ class Palette {
   static Color black = Colors.black;
   static Color dark = Color(0xff191919);
   static Color hintColor = Color(0xff4C4C4C);
+  static Color success = Colors.green;
+  static Color failed = Colors.red;
 }
