@@ -1,11 +1,14 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class MainModel {
   // TODO: add your model here
   String noms;
   String profession;
   DateTime dateDeNaissance;
+  
   DateTime dateDeDeces;
   String bioGraphie;
   String soumisPar;
@@ -60,11 +63,14 @@ class MainModel {
     return <String, dynamic>{
       'noms': noms,
       'profession': profession,
-      'dateDeNaissance': dateDeNaissance.millisecondsSinceEpoch,
-      'dateDeDeces': dateDeDeces.millisecondsSinceEpoch,
+      'dateDeNaissance': Timestamp.fromMillisecondsSinceEpoch(
+          dateDeNaissance.millisecondsSinceEpoch),
+      'dateDeDeces': Timestamp.fromMillisecondsSinceEpoch(
+          dateDeDeces.millisecondsSinceEpoch),
       'bioGraphie': bioGraphie,
       'soumisPar': soumisPar,
-      'dateEnregistrement': dateEnregistrement.millisecondsSinceEpoch,
+      'dateEnregistrement': Timestamp.fromMillisecondsSinceEpoch(
+          dateEnregistrement.millisecondsSinceEpoch),
       'lienAvecLeCandidat': lienAvecLeCandidat,
       'pays': pays,
       'numeroDeTelephone': numeroDeTelephone,
@@ -76,11 +82,14 @@ class MainModel {
     return MainModel(
       noms: map['noms'] as String,
       profession: map['profession'] as String,
-      dateDeNaissance: DateTime.fromMillisecondsSinceEpoch(map['dateDeNaissance'] as int),
-      dateDeDeces: DateTime.fromMillisecondsSinceEpoch(map['dateDeDeces'] as int),
+      dateDeNaissance:
+          DateTime.fromMillisecondsSinceEpoch(map['dateDeNaissance'] as int),
+      dateDeDeces:
+          DateTime.fromMillisecondsSinceEpoch(map['dateDeDeces'] as int),
       bioGraphie: map['bioGraphie'] as String,
       soumisPar: map['soumisPar'] as String,
-      dateEnregistrement: DateTime.fromMillisecondsSinceEpoch(map['dateEnregistrement'] as int),
+      dateEnregistrement:
+          DateTime.fromMillisecondsSinceEpoch(map['dateEnregistrement'] as int),
       lienAvecLeCandidat: map['lienAvecLeCandidat'] as String,
       pays: map['pays'] as String,
       numeroDeTelephone: map['numeroDeTelephone'] as String,
@@ -90,7 +99,8 @@ class MainModel {
 
   String toJson() => json.encode(toMap());
 
-  factory MainModel.fromJson(String source) => MainModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory MainModel.fromJson(String source) =>
+      MainModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
@@ -100,33 +110,32 @@ class MainModel {
   @override
   bool operator ==(covariant MainModel other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.noms == noms &&
-      other.profession == profession &&
-      other.dateDeNaissance == dateDeNaissance &&
-      other.dateDeDeces == dateDeDeces &&
-      other.bioGraphie == bioGraphie &&
-      other.soumisPar == soumisPar &&
-      other.dateEnregistrement == dateEnregistrement &&
-      other.lienAvecLeCandidat == lienAvecLeCandidat &&
-      other.pays == pays &&
-      other.numeroDeTelephone == numeroDeTelephone &&
-      other.email == email;
+
+    return other.noms == noms &&
+        other.profession == profession &&
+        other.dateDeNaissance == dateDeNaissance &&
+        other.dateDeDeces == dateDeDeces &&
+        other.bioGraphie == bioGraphie &&
+        other.soumisPar == soumisPar &&
+        other.dateEnregistrement == dateEnregistrement &&
+        other.lienAvecLeCandidat == lienAvecLeCandidat &&
+        other.pays == pays &&
+        other.numeroDeTelephone == numeroDeTelephone &&
+        other.email == email;
   }
 
   @override
   int get hashCode {
     return noms.hashCode ^
-      profession.hashCode ^
-      dateDeNaissance.hashCode ^
-      dateDeDeces.hashCode ^
-      bioGraphie.hashCode ^
-      soumisPar.hashCode ^
-      dateEnregistrement.hashCode ^
-      lienAvecLeCandidat.hashCode ^
-      pays.hashCode ^
-      numeroDeTelephone.hashCode ^
-      email.hashCode;
+        profession.hashCode ^
+        dateDeNaissance.hashCode ^
+        dateDeDeces.hashCode ^
+        bioGraphie.hashCode ^
+        soumisPar.hashCode ^
+        dateEnregistrement.hashCode ^
+        lienAvecLeCandidat.hashCode ^
+        pays.hashCode ^
+        numeroDeTelephone.hashCode ^
+        email.hashCode;
   }
 }

@@ -9,12 +9,10 @@ class DateField extends StatefulWidget {
     required this.hint,
     required this.items,
     required this.value,
-   
   }) : super(key: key);
   String hint;
   List<String> items;
   String value;
-
 
   @override
   State<DateField> createState() => _DateFieldState();
@@ -49,15 +47,14 @@ class _DateFieldState extends State<DateField> {
             color: isDarkMode ? Palette.primary : Palette.dark),
         items: widget.items
             .map((item) => DropdownMenuItem(
-                  child: Text(item),
                   value: item,
+                  child: Text(item),
                 ))
             .toList(),
         onChanged: (newValue) {
           setState(() {
             widget.value = newValue.toString();
           });
-          print(widget.value);
         },
       ),
     );
