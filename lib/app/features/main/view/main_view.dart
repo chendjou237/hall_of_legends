@@ -147,7 +147,7 @@ class _MainViewState extends ConsumerState<MainView> {
                     ),
                     Text(
                         AppLocalizations.of(context)!.dateDeNaissanceDuCandidat,
-                        style: Style.whiteGothamMedium),
+                        style:  isDarkMode ? Style.whiteGothamMedium : Style.gothamMedium),
                     SizedBox(
                       height: 17.h,
                     ),
@@ -234,6 +234,7 @@ class _MainViewState extends ConsumerState<MainView> {
               ),
               SingleChildScrollView(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     MainField(
                       controller: submitController,
@@ -244,7 +245,7 @@ class _MainViewState extends ConsumerState<MainView> {
                     SizedBox(height: 78.h),
                     Text(
                       AppLocalizations.of(context)!.dateDenregistrement,
-                      style: Style.whiteGothamMedium,
+                      style:  isDarkMode ? Style.whiteGothamMedium : Style.gothamMedium,
                     ),
                     SizedBox(
                       height: 28.h,
@@ -273,7 +274,7 @@ class _MainViewState extends ConsumerState<MainView> {
                     SizedBox(height: 109.h),
                     Text(
                       AppLocalizations.of(context)!.lienAvecLeCandidat,
-                      style: Style.whiteGothamMedium,
+                      style:  isDarkMode ? Style.whiteGothamMedium : Style.gothamMedium,
                     ),
                     SizedBox(
                       height: 15.6.h,
@@ -286,7 +287,7 @@ class _MainViewState extends ConsumerState<MainView> {
                     ),
                     SizedBox(height: 63.h),
                     Text(AppLocalizations.of(context)!.votrePays,
-                        style: Style.whiteGothamMedium),
+                        style:  isDarkMode ? Style.whiteGothamMedium : Style.gothamMedium),
                     SizedBox(height: 15.h),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 29.w),
@@ -302,7 +303,7 @@ class _MainViewState extends ConsumerState<MainView> {
                         },
                         hint: Text(
                           AppLocalizations.of(context)!.selectionnerVotrePays,
-                          style: Style.gothamLight,
+                          style:  isDarkMode ? Style.whiteGothamMedium : Style.gothamMedium,
                         ),
                         itemBuilder: (country) => Text(
                           country.name,
@@ -319,7 +320,7 @@ class _MainViewState extends ConsumerState<MainView> {
                       height: 49.h,
                     ),
                     Text(AppLocalizations.of(context)!.numeroDeTelephone,
-                        style: Style.whiteGothamMedium),
+                        style:  isDarkMode ? Style.whiteGothamMedium : Style.gothamMedium),
                     SizedBox(
                       height: 15.h,
                     ),
@@ -481,7 +482,7 @@ class _MainViewState extends ConsumerState<MainView> {
                               setState(() {
                                 reset();
                                 pageController.previousPage(
-                                    duration: Duration(seconds:1 ), curve: Curves.bounceOut);
+                                    duration: const Duration(seconds:1 ), curve: Curves.bounceOut);
                               });
                             } else {
                               Fluttertoast.showToast(msg: "echec");
@@ -496,7 +497,7 @@ class _MainViewState extends ConsumerState<MainView> {
                         ),
                         child: Text(
                           AppLocalizations.of(context)!.enregistrerEtEnvoyer,
-                          style: Style.gothamMedium,
+                          style: isDarkMode ? Style.whiteGothamMedium : Style.gothamMedium,
                         ),
                       ),
                     ),

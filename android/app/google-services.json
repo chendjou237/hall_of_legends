@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:592184472687:android:112babc8c02d794600899a",
         "android_client_info": {
-          "package_name": "com.example.hall_of_legends"
+          "package_name": "com.example.hof"
         }
       },
       "oauth_client": [
@@ -34,7 +34,7 @@
               "client_id": "592184472687-bucofgmfb7dqemof26tsi3tuh0p43vvk.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.hallOfLegends"
+                "bundle_id": "com.example.hof"
               }
             }
           ]
