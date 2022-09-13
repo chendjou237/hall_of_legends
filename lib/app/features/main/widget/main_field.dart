@@ -4,7 +4,7 @@ import 'package:queen_validators/queen_validators.dart';
 
 import '../../../core/theme/theme.dart';
 
-class MainField extends StatelessWidget {
+class MainField extends StatefulWidget {
   const MainField({
     Key? key,
     required this.hint,
@@ -18,8 +18,14 @@ class MainField extends StatelessWidget {
   final String title;
   final TextEditingController controller;
   final TextValidationRule? validator;
-  final String? confirm;
+  final TextEditingController? confirm;
+  
 
+  @override
+  State<MainField> createState() => _MainFieldState();
+}
+
+class _MainFieldState extends State<MainField> {
   @override
   Widget build(BuildContext context) {
     var brightness = MediaQuery.of(context).platformBrightness;
@@ -28,7 +34,7 @@ class MainField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          title,
+          widget.title,
           style: isDarkMode ? Style.whiteGothamMedium : Style.gothamMedium,
         ),
         SizedBox(height: 12.h),
@@ -42,21 +48,24 @@ class MainField extends StatelessWidget {
             border: Border.all(color: Palette.primary),
           ),
           child: TextFormField(
-            validator: confirm == null
-                ? qValidator([IsRequired(), if (validator != null) validator!])
+            validator: widget.confirm == null
+                ? qValidator([
+                    IsRequired(),
+                    if (widget.validator != null) widget.validator!
+                  ])
                 : (value) {
-                    if (value!.isEmpty) {
-                      return "value requise";
-                    }
-                    if (value != confirm) {
+                    // if (value!.isEmpty) {
+                    //   return "value requise";
+                    // }
+                    if (value != widget.confirm!.text) {
                       return "s'il vous plait entrez un text correspondant";
                     }
                     return null;
                   },
-            controller: controller,
+            controller: widget.controller,
             style: Style.gothamLight,
             decoration: InputDecoration(
-              hintText: hint,
+              hintText: widget.hint,
               hintStyle: Style.gothamLight,
               labelStyle: Style.gothamLight,
               border: InputBorder.none,
