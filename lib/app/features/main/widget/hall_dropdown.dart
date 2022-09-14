@@ -44,8 +44,7 @@ class _HallDropDownState extends State<HallDropDown> {
                     value: l,
                     child: Text(
                       l,
-                      style: Style.gotham.copyWith(
-                          color: isDarkMode ? Palette.white : Palette.primary),
+                      style: Style.gothamLight,
                     ),
                   ))
               .toList(),

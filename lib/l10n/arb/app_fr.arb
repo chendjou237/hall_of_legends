@@ -52,7 +52,24 @@
 
   "veuillezConfirmerVotreAdresseEmail":"Veuillez confirmer votre adresse e-mail",
 
-  "enregistrerEtEnvoyer": "ENREGISTRER ET ENVOYER"
+  "enregistrerEtEnvoyer": "ENREGISTRER ET ENVOYER",
+  
+  "vosResponseOntBienEteEnregistrer": "Vos response ont bien été enregistrer",
+
+  "felicitation": "Felicitation",
+
+ "veuillezRemplirLesInformationsNecessaire" :"Veuillez remplir les informations nécessaire",
+
+ "verifieAvecSucces": "Vérifié avec succès",
+
+ "lesDeuxNumerosNeCorrespondentPas":"Les deux numéros ne correspondent pas",
+
+ "veuillezEntrerDesValeurs": "Veuillez entrer des valeurs"
+
+
+
+
+
 
 
 }

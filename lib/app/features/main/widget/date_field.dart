@@ -42,7 +42,7 @@ class _DateFieldState extends State<DateField> {
             style: Style.gothamLight,
           ),
         ),
-        style: Style.whiteGothamMedium,
+        style: isDarkMode ? Style.gothamLight : Style.gothamLight,
         icon: Icon(Icons.arrow_drop_down,
             color: isDarkMode ? Palette.primary : Palette.dark),
         items: widget.items
