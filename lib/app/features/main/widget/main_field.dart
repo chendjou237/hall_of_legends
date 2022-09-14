@@ -19,7 +19,6 @@ class MainField extends StatefulWidget {
   final TextEditingController controller;
   final TextValidationRule? validator;
   final TextEditingController? confirm;
-  
 
   @override
   State<MainField> createState() => _MainFieldState();
@@ -64,6 +63,7 @@ class _MainFieldState extends State<MainField> {
                   },
             controller: widget.controller,
             style: Style.gothamLight,
+            cursorColor: isDarkMode ? Palette.hintColor : Palette.dark,
             decoration: InputDecoration(
               hintText: widget.hint,
               hintStyle: Style.gothamLight,

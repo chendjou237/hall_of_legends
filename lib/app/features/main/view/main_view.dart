@@ -41,8 +41,11 @@ class _MainViewState extends ConsumerState<MainView> {
   void initState() {
     super.initState();
     pageController = PageController();
+
     // init();
   }
+
+  bool _isLoading = false;
 
   String jourNaissance = "1";
   String jourDeces = "1";
@@ -82,6 +85,7 @@ class _MainViewState extends ConsumerState<MainView> {
     final database = ref.read(databaseProvider.state);
     var brightness = MediaQuery.of(context).platformBrightness;
     bool isDarkMode = brightness == Brightness.dark;
+
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,
@@ -147,7 +151,9 @@ class _MainViewState extends ConsumerState<MainView> {
                     ),
                     Text(
                         AppLocalizations.of(context)!.dateDeNaissanceDuCandidat,
-                        style:  isDarkMode ? Style.whiteGothamMedium : Style.gothamMedium),
+                        style: isDarkMode
+                            ? Style.whiteGothamMedium
+                            : Style.gothamMedium),
                     SizedBox(
                       height: 17.h,
                     ),
@@ -220,11 +226,15 @@ class _MainViewState extends ConsumerState<MainView> {
                         controller: bioController,
                         keyboardType: TextInputType.multiline,
                         maxLines: null,
-                        style: isDarkMode
-                            ? Style.whiteGothamMedium
-                            : Style.gothamMedium,
-                        decoration: const InputDecoration(
+                        style: (isDarkMode
+                                ? Style.gothamLight
+                                : Style.gothamMedium)
+                            .copyWith(height: 4.h),
+                        cursorColor:
+                            isDarkMode ? Palette.hintColor : Palette.dark,
+                        decoration: InputDecoration(
                           border: InputBorder.none,
+                          focusColor: Palette.hintColor,
                         ),
                       ),
                     ),
@@ -245,7 +255,9 @@ class _MainViewState extends ConsumerState<MainView> {
                     SizedBox(height: 78.h),
                     Text(
                       AppLocalizations.of(context)!.dateDenregistrement,
-                      style:  isDarkMode ? Style.whiteGothamMedium : Style.gothamMedium,
+                      style: isDarkMode
+                          ? Style.whiteGothamMedium
+                          : Style.gothamMedium,
                     ),
                     SizedBox(
                       height: 28.h,
@@ -274,7 +286,9 @@ class _MainViewState extends ConsumerState<MainView> {
                     SizedBox(height: 109.h),
                     Text(
                       AppLocalizations.of(context)!.lienAvecLeCandidat,
-                      style:  isDarkMode ? Style.whiteGothamMedium : Style.gothamMedium,
+                      style: isDarkMode
+                          ? Style.whiteGothamMedium
+                          : Style.gothamMedium,
                     ),
                     SizedBox(
                       height: 15.6.h,
@@ -287,7 +301,9 @@ class _MainViewState extends ConsumerState<MainView> {
                     ),
                     SizedBox(height: 63.h),
                     Text(AppLocalizations.of(context)!.votrePays,
-                        style:  isDarkMode ? Style.whiteGothamMedium : Style.gothamMedium),
+                        style: isDarkMode
+                            ? Style.whiteGothamMedium
+                            : Style.gothamMedium),
                     SizedBox(height: 15.h),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 29.w),
@@ -303,12 +319,14 @@ class _MainViewState extends ConsumerState<MainView> {
                         },
                         hint: Text(
                           AppLocalizations.of(context)!.selectionnerVotrePays,
-                          style:  isDarkMode ? Style.whiteGothamMedium : Style.gothamMedium,
+                          style: isDarkMode
+                              ? Style.gothamLight
+                              : Style.gothamLight,
                         ),
                         itemBuilder: (country) => Text(
                           country.name,
                           style: isDarkMode
-                              ? Style.whiteGothamLigh
+                              ? Style.gothamLight
                               : Style.gothamLight,
                         ),
                         isExpanded: true,
@@ -320,7 +338,9 @@ class _MainViewState extends ConsumerState<MainView> {
                       height: 49.h,
                     ),
                     Text(AppLocalizations.of(context)!.numeroDeTelephone,
-                        style:  isDarkMode ? Style.whiteGothamMedium : Style.gothamMedium),
+                        style: isDarkMode
+                            ? Style.whiteGothamMedium
+                            : Style.gothamMedium),
                     SizedBox(
                       height: 15.h,
                     ),
@@ -341,18 +361,16 @@ class _MainViewState extends ConsumerState<MainView> {
                           backgroundColor:
                               isDarkMode ? Palette.dark : Palette.white,
                           countryCodeStyle: isDarkMode
-                              ? Style.whiteGothamLigh
+                              ? Style.gothamLight
                               : Style.gothamLight,
                           countryNameStyle: isDarkMode
-                              ? Style.whiteGothamLigh
+                              ? Style.gothamLight
                               : Style.gothamLight,
                         ),
-                        style: isDarkMode
-                            ? Style.whiteGothamLigh
-                            : Style.gothamLight,
-                        dropdownTextStyle: isDarkMode
-                            ? Style.whiteGothamLigh
-                            : Style.gothamLight,
+                        style:
+                            isDarkMode ? Style.gothamLight : Style.gothamLight,
+                        dropdownTextStyle:
+                            isDarkMode ? Style.gothamLight : Style.gothamLight,
                         decoration: const InputDecoration(
                           border: InputBorder.none,
                           isDense: true,
@@ -382,10 +400,10 @@ class _MainViewState extends ConsumerState<MainView> {
                         controller: confirmTelController,
                         validator: (value) {
                           if (value == null) {
-                            return "Veillez entrer des valeurs";
+                            return AppLocalizations.of(context)!.veuillezEntrerDesValeurs;
                           }
                           if (value.completeNumber != telController.text) {
-                            return "Les deux numeros ne correspondent pas";
+                            return AppLocalizations.of(context)!.lesDeuxNumerosNeCorrespondentPas;
                           }
                           return null;
                         },
@@ -394,18 +412,16 @@ class _MainViewState extends ConsumerState<MainView> {
                           backgroundColor:
                               isDarkMode ? Palette.dark : Palette.white,
                           countryCodeStyle: isDarkMode
-                              ? Style.whiteGothamLigh
+                              ? Style.gothamLight
                               : Style.gothamLight,
                           countryNameStyle: isDarkMode
-                              ? Style.whiteGothamLigh
+                              ? Style.gothamLight
                               : Style.gothamLight,
                         ),
-                        style: isDarkMode
-                            ? Style.whiteGothamLigh
-                            : Style.gothamLight,
-                        dropdownTextStyle: isDarkMode
-                            ? Style.whiteGothamLigh
-                            : Style.gothamLight,
+                        style:
+                            isDarkMode ? Style.gothamLight : Style.gothamLight,
+                        dropdownTextStyle:
+                            isDarkMode ? Style.gothamLight : Style.gothamLight,
                         decoration: const InputDecoration(
                           border: InputBorder.none,
                           isDense: true,
@@ -436,17 +452,23 @@ class _MainViewState extends ConsumerState<MainView> {
                       height: 122.7.h,
                     ),
                     Center(
-                      child: OutlinedButton(
+                      child:  _isLoading
+                            ? CircularProgressIndicator(
+                                color: Palette.primary,
+                              )
+                            : OutlinedButton(
                         onPressed: () async {
-                          setState(() {});
+                          setState(() {
+                            _isLoading = true;
+                          });
                           if (!_formKey.currentState!.validate()) {
                             Fluttertoast.showToast(
-                              msg: "something Went Wrong",
+                              msg:AppLocalizations.of(context)!.veuillezRemplirLesInformationsNecessaire ,
                               backgroundColor: Palette.failed,
                             );
                           } else {
                             Fluttertoast.showToast(
-                              msg: "SuccessFully checked",
+                              msg:AppLocalizations.of(context)! .verifieAvecSucces,
                               backgroundColor: Palette.success,
                             );
                             final model = MainModel(
@@ -474,20 +496,31 @@ class _MainViewState extends ConsumerState<MainView> {
                                 context: context,
                                 dialogType: DialogType.success,
                                 animType: AnimType.scale,
-                                title: 'Felicitation',
-                                desc: 'Vos response ont bien été enregistrer',
+                                titleTextStyle: isDarkMode
+                              ? Style.primaryGothamMedium
+                              : Style.gothamMedium,
+                                descTextStyle:  isDarkMode ? Style.whiteGothamMedium : Style.gothamMedium,
+                                title: AppLocalizations.of(context)!.felicitation,
+                                dialogBackgroundColor:
+                                    isDarkMode ? Palette.dark : Palette.white,
+                                desc: AppLocalizations.of(context)!.vosResponseOntBienEteEnregistrer,
                                 btnOkOnPress: () {},
+                                
                               ).show();
 
                               setState(() {
                                 reset();
                                 pageController.previousPage(
-                                    duration: const Duration(seconds:1 ), curve: Curves.bounceOut);
+                                    duration: const Duration(seconds: 1),
+                                    curve: Curves.bounceOut);
                               });
                             } else {
                               Fluttertoast.showToast(msg: "echec");
                             }
                           }
+                          setState(() {
+                            _isLoading = false;
+                          });
                         },
                         style: OutlinedButton.styleFrom(
                           backgroundColor: Palette.primary,
@@ -496,13 +529,16 @@ class _MainViewState extends ConsumerState<MainView> {
                           textStyle: Style.gothamMedium,
                         ),
                         child: Text(
-                          AppLocalizations.of(context)!.enregistrerEtEnvoyer,
-                          style: isDarkMode ? Style.whiteGothamMedium : Style.gothamMedium,
-                        ),
+                                AppLocalizations.of(context)!
+                                    .enregistrerEtEnvoyer,
+                                style: isDarkMode
+                                    ? Style.whiteGothamMedium
+                                    : Style.gothamMedium,
+                              ),
                       ),
                     ),
                     SizedBox(
-                      height: 225.h,
+                      height: 111.h,
                     ),
                     Center(
                       child: Image.asset(
