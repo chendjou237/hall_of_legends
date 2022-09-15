@@ -62,7 +62,7 @@ class _MainFieldState extends State<MainField> {
                     return null;
                   },
             controller: widget.controller,
-            style: Style.gothamLight,
+            style: isDarkMode ? Style.whiteGothamLight : Style.darkGothamLight,
             cursorColor: isDarkMode ? Palette.hintColor : Palette.dark,
             decoration: InputDecoration(
               hintText: widget.hint,

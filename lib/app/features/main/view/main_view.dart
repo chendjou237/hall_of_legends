@@ -227,8 +227,8 @@ class _MainViewState extends ConsumerState<MainView> {
                         keyboardType: TextInputType.multiline,
                         maxLines: null,
                         style: (isDarkMode
-                                ? Style.gothamLight
-                                : Style.gothamMedium)
+                                ? Style.whiteGothamLight
+                                : Style.darkGothamLight)
                             .copyWith(height: 4.h),
                         cursorColor:
                             isDarkMode ? Palette.hintColor : Palette.dark,
@@ -320,14 +320,14 @@ class _MainViewState extends ConsumerState<MainView> {
                         hint: Text(
                           AppLocalizations.of(context)!.selectionnerVotrePays,
                           style: isDarkMode
-                              ? Style.gothamLight
-                              : Style.gothamLight,
+                              ? Style.whiteGothamLight
+                              : Style.darkGothamLight,
                         ),
                         itemBuilder: (country) => Text(
                           country.name,
                           style: isDarkMode
-                              ? Style.gothamLight
-                              : Style.gothamLight,
+                              ? Style.whiteGothamLight
+                              : Style.darkGothamLight,
                         ),
                         isExpanded: true,
                         dropdownColor:
@@ -356,21 +356,28 @@ class _MainViewState extends ConsumerState<MainView> {
                       child: IntlPhoneField(
                         showDropdownIcon: false,
                         controller: telController,
+                        onCountryChanged: (country) {
+                          setState(() {
+                            print(telController.text);
+                          });
+                        },
                         textAlignVertical: TextAlignVertical.center,
                         pickerDialogStyle: PickerDialogStyle(
                           backgroundColor:
                               isDarkMode ? Palette.dark : Palette.white,
                           countryCodeStyle: isDarkMode
-                              ? Style.gothamLight
-                              : Style.gothamLight,
+                              ? Style.whiteGothamLight
+                              : Style.darkGothamLight,
                           countryNameStyle: isDarkMode
-                              ? Style.gothamLight
-                              : Style.gothamLight,
+                              ? Style.whiteGothamLight
+                              : Style.darkGothamLight,
                         ),
-                        style:
-                            isDarkMode ? Style.gothamLight : Style.gothamLight,
-                        dropdownTextStyle:
-                            isDarkMode ? Style.gothamLight : Style.gothamLight,
+                        style: isDarkMode
+                            ? Style.whiteGothamLight
+                            : Style.darkGothamLight,
+                        dropdownTextStyle: isDarkMode
+                            ? Style.whiteGothamLight
+                            : Style.darkGothamLight,
                         decoration: const InputDecoration(
                           border: InputBorder.none,
                           isDense: true,
@@ -382,8 +389,8 @@ class _MainViewState extends ConsumerState<MainView> {
                       AppLocalizations.of(context)!
                           .confirmerLeNumeroDeTelephone,
                       style: isDarkMode
-                          ? Style.whiteGothamMedium
-                          : Style.gothamMedium,
+                          ? Style.whiteGothamLight
+                          : Style.darkGothamLight,
                     ),
                     SizedBox(height: 12.h),
                     Container(
@@ -400,10 +407,12 @@ class _MainViewState extends ConsumerState<MainView> {
                         controller: confirmTelController,
                         validator: (value) {
                           if (value == null) {
-                            return AppLocalizations.of(context)!.veuillezEntrerDesValeurs;
+                            return AppLocalizations.of(context)!
+                                .veuillezEntrerDesValeurs;
                           }
                           if (value.completeNumber != telController.text) {
-                            return AppLocalizations.of(context)!.lesDeuxNumerosNeCorrespondentPas;
+                            return AppLocalizations.of(context)!
+                                .lesDeuxNumerosNeCorrespondentPas;
                           }
                           return null;
                         },
@@ -412,16 +421,18 @@ class _MainViewState extends ConsumerState<MainView> {
                           backgroundColor:
                               isDarkMode ? Palette.dark : Palette.white,
                           countryCodeStyle: isDarkMode
-                              ? Style.gothamLight
-                              : Style.gothamLight,
+                              ? Style.whiteGothamLight
+                              : Style.darkGothamLight,
                           countryNameStyle: isDarkMode
-                              ? Style.gothamLight
-                              : Style.gothamLight,
+                              ? Style.whiteGothamLight
+                              : Style.darkGothamLight,
                         ),
-                        style:
-                            isDarkMode ? Style.gothamLight : Style.gothamLight,
-                        dropdownTextStyle:
-                            isDarkMode ? Style.gothamLight : Style.gothamLight,
+                        style: isDarkMode
+                            ? Style.whiteGothamLight
+                            : Style.darkGothamLight,
+                        dropdownTextStyle: isDarkMode
+                            ? Style.whiteGothamLight
+                            : Style.darkGothamLight,
                         decoration: const InputDecoration(
                           border: InputBorder.none,
                           isDense: true,
@@ -452,90 +463,98 @@ class _MainViewState extends ConsumerState<MainView> {
                       height: 122.7.h,
                     ),
                     Center(
-                      child:  _isLoading
-                            ? CircularProgressIndicator(
-                                color: Palette.primary,
-                              )
-                            : OutlinedButton(
-                        onPressed: () async {
-                          setState(() {
-                            _isLoading = true;
-                          });
-                          if (!_formKey.currentState!.validate()) {
-                            Fluttertoast.showToast(
-                              msg:AppLocalizations.of(context)!.veuillezRemplirLesInformationsNecessaire ,
-                              backgroundColor: Palette.failed,
-                            );
-                          } else {
-                            Fluttertoast.showToast(
-                              msg:AppLocalizations.of(context)! .verifieAvecSucces,
-                              backgroundColor: Palette.success,
-                            );
-                            final model = MainModel(
-                                noms: nameController.text,
-                                profession: titleController.text,
-                                dateDeNaissance: DateTime(
-                                    int.parse(anneeNaissance),
-                                    int.parse(moisNaissance),
-                                    int.parse(jourNaissance)),
-                                dateDeDeces: DateTime(int.parse(anneeDeces),
-                                    int.parse(moisDeces), int.parse(jourDeces)),
-                                bioGraphie: bioController.text,
-                                soumisPar: submitController.text,
-                                dateEnregistrement: DateTime(
-                                  int.parse(anneeEnregistrement),
-                                  int.parse(moisEnregistrement),
-                                  int.parse(jourDeces),
-                                ),
-                                lienAvecLeCandidat: link,
-                                pays: pays,
-                                numeroDeTelephone: telController.text,
-                                email: emailController.text);
-                            if (await database.state.createForm(model)) {
-                              AwesomeDialog(
-                                context: context,
-                                dialogType: DialogType.success,
-                                animType: AnimType.scale,
-                                titleTextStyle: isDarkMode
-                              ? Style.primaryGothamMedium
-                              : Style.gothamMedium,
-                                descTextStyle:  isDarkMode ? Style.whiteGothamMedium : Style.gothamMedium,
-                                title: AppLocalizations.of(context)!.felicitation,
-                                dialogBackgroundColor:
-                                    isDarkMode ? Palette.dark : Palette.white,
-                                desc: AppLocalizations.of(context)!.vosResponseOntBienEteEnregistrer,
-                                btnOkOnPress: () {},
-                                
-                              ).show();
+                      child: _isLoading
+                          ? CircularProgressIndicator(
+                              color: Palette.primary,
+                            )
+                          : OutlinedButton(
+                              onPressed: () async {
+                                setState(() {
+                                  _isLoading = true;
+                                });
+                                if (!_formKey.currentState!.validate()) {
+                                  Fluttertoast.showToast(
+                                    msg: AppLocalizations.of(context)!
+                                        .veuillezRemplirLesInformationsNecessaire,
+                                    backgroundColor: Palette.failed,
+                                  );
+                                } else {
+                                  Fluttertoast.showToast(
+                                    msg: AppLocalizations.of(context)!
+                                        .verifieAvecSucces,
+                                    backgroundColor: Palette.success,
+                                  );
+                                  final model = MainModel(
+                                      noms: nameController.text,
+                                      profession: titleController.text,
+                                      dateDeNaissance: DateTime(
+                                          int.parse(anneeNaissance),
+                                          int.parse(moisNaissance),
+                                          int.parse(jourNaissance)),
+                                      dateDeDeces: DateTime(
+                                          int.parse(anneeDeces),
+                                          int.parse(moisDeces),
+                                          int.parse(jourDeces)),
+                                      bioGraphie: bioController.text,
+                                      soumisPar: submitController.text,
+                                      dateEnregistrement: DateTime(
+                                        int.parse(anneeEnregistrement),
+                                        int.parse(moisEnregistrement),
+                                        int.parse(jourDeces),
+                                      ),
+                                      lienAvecLeCandidat: link,
+                                      pays: pays,
+                                      numeroDeTelephone: telController.text,
+                                      email: emailController.text);
+                                  if (await database.state.createForm(model)) {
+                                    AwesomeDialog(
+                                      context: context,
+                                      dialogType: DialogType.success,
+                                      animType: AnimType.scale,
+                                      titleTextStyle: isDarkMode
+                                          ? Style.primaryGothamMedium
+                                          : Style.gothamMedium,
+                                      descTextStyle: isDarkMode
+                                          ? Style.whiteGothamMedium
+                                          : Style.gothamMedium,
+                                      title: AppLocalizations.of(context)!
+                                          .felicitation,
+                                      dialogBackgroundColor: isDarkMode
+                                          ? Palette.dark
+                                          : Palette.white,
+                                      desc: AppLocalizations.of(context)!
+                                          .vosResponseOntBienEteEnregistrer,
+                                      btnOkOnPress: () {},
+                                    ).show();
 
-                              setState(() {
-                                reset();
-                                pageController.previousPage(
-                                    duration: const Duration(seconds: 1),
-                                    curve: Curves.bounceOut);
-                              });
-                            } else {
-                              Fluttertoast.showToast(msg: "echec");
-                            }
-                          }
-                          setState(() {
-                            _isLoading = false;
-                          });
-                        },
-                        style: OutlinedButton.styleFrom(
-                          backgroundColor: Palette.primary,
-                          shape: const StadiumBorder(),
-                          side: BorderSide.none,
-                          textStyle: Style.gothamMedium,
-                        ),
-                        child: Text(
+                                    setState(() {
+                                      reset();
+                                      pageController.previousPage(
+                                          duration: const Duration(seconds: 1),
+                                          curve: Curves.bounceOut);
+                                    });
+                                  } else {
+                                    Fluttertoast.showToast(msg: "echec");
+                                  }
+                                }
+                                setState(() {
+                                  _isLoading = false;
+                                });
+                              },
+                              style: OutlinedButton.styleFrom(
+                                backgroundColor: Palette.primary,
+                                shape: const StadiumBorder(),
+                                side: BorderSide.none,
+                                textStyle: Style.gothamMedium,
+                              ),
+                              child: Text(
                                 AppLocalizations.of(context)!
                                     .enregistrerEtEnvoyer,
                                 style: isDarkMode
                                     ? Style.whiteGothamMedium
                                     : Style.gothamMedium,
                               ),
-                      ),
+                            ),
                     ),
                     SizedBox(
                       height: 111.h,
