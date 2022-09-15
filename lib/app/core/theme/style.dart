@@ -18,5 +18,7 @@ class Style {
 
   static TextStyle gothamLight = gotham.copyWith(
       fontWeight: FontWeight.w300, color: Palette.hintColor, fontSize: 39.sp);
-  static TextStyle whiteGothamLigh = gothamLight.copyWith(color: Palette.white);
+  static TextStyle whiteGothamLight = gothamLight.copyWith(color: Palette.white);
+  static TextStyle darkGothamLight = gothamLight.copyWith(color: Palette.dark);
+
 }

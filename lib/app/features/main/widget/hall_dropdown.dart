@@ -44,7 +44,9 @@ class _HallDropDownState extends State<HallDropDown> {
                     value: l,
                     child: Text(
                       l,
-                      style: Style.gothamLight,
+                      style: isDarkMode
+                          ? Style.whiteGothamLight
+                          : Style.darkGothamLight,
                     ),
                   ))
               .toList(),
