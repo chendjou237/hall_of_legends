@@ -32,6 +32,7 @@ dependencies:
   awesome_dialog: ^3.0.0
   lottie: ^1.4.2
   is_first_run: ^1.0.0
+  url_launcher: ^6.1.5
 
 dev_dependencies:
   flutter_localizations:
@@ -76,5 +77,6 @@ flutter:
         - asset: assets/fonts/CENTAUR.TTF
 
   assets:
+    - assets/
     - assets/images/
     - assets/animation/
