@@ -14,6 +14,7 @@ import 'package:hall_of_fame/l10n/l10n.dart';
 import 'package:intl_phone_field/country_picker_dialog.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:queen_validators/queen_validators.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/theme/palette.dart';
 import '../data/days.dart';
@@ -22,7 +23,7 @@ import '../model/main_model.dart';
 class MainView extends ConsumerStatefulWidget {
   const MainView({super.key});
 
-  static const routeName = '/';
+  static const routeName = '/home';
 
   @override
   ConsumerState<MainView> createState() => _MainViewState();
@@ -32,7 +33,7 @@ class _MainViewState extends ConsumerState<MainView> {
   final day = "1";
 
   final liens = [
-    'Familiale',
+    'Famille',
     'Amicale',
     'Aucun',
   ];
@@ -43,6 +44,15 @@ class _MainViewState extends ConsumerState<MainView> {
     pageController = PageController();
 
     // init();
+  }
+
+  final Uri _url = Uri.parse(
+      'https://halloflegends.online/politique-de-confidentialite.html');
+
+  Future<void> _launchUrl() async {
+    if (!await launchUrl(_url)) {
+      throw 'Could not launch $_url';
+    }
   }
 
   bool _isLoading = false;
@@ -57,7 +67,7 @@ class _MainViewState extends ConsumerState<MainView> {
   String anneeDeces = "1943";
   String anneeEnregistrement = "1943";
   String pays = "";
-  String link = "Familiale";
+  String link = "Famille";
   final nameController = TextEditingController();
 
   final titleController = TextEditingController();
@@ -556,6 +566,24 @@ class _MainViewState extends ConsumerState<MainView> {
                               ),
                             ),
                     ),
+                    SizedBox(height: 42.h),
+                    Center(
+                      child: OutlinedButton(
+                        onPressed: () async {
+                          showConfidentialPolytics();
+                        },
+                        style: OutlinedButton.styleFrom(
+                          backgroundColor: Colors.transparent,
+                          shape: const StadiumBorder(),
+                          side: BorderSide(color: Palette.primary, width: 3.w),
+                        ),
+                        child: Text(
+                          "politique de confidenialité",
+                          style: Style.whiteGothamLight
+                              .copyWith(color: Palette.primary),
+                        ),
+                      ),
+                    ),
                     SizedBox(
                       height: 111.h,
                     ),
@@ -573,6 +601,77 @@ class _MainViewState extends ConsumerState<MainView> {
           ),
         ),
       ),
+    );
+  }
+
+  Future showConfidentialPolytics() async {
+    await showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        var brightness = MediaQuery.of(context).platformBrightness;
+        bool isDarkMode = brightness == Brightness.dark;
+
+        return Container(
+            padding: EdgeInsets.symmetric(vertical: 72.h, horizontal: 32.w),
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(isDarkMode
+                      ? 'assets/images/dark_bg.jpg'
+                      : 'assets/images/light_bg.jpg'),
+                  fit: BoxFit.cover,
+                ),
+                border: Border.all(width: 0),
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(150.r),
+                    topRight: Radius.circular(150.r))),
+            height: MediaQuery.of(context).size.height * 0.5,
+            child: Column(
+              children: [
+                Text(
+                  "politique de confidenialité",
+                  style: isDarkMode
+                      ? Style.gothamMedium.copyWith(
+                          color: Palette.white,
+                          fontSize: 74.sp,
+                          fontWeight: FontWeight.w600)
+                      : Style.primaryGothamMedium.copyWith(
+                          fontSize: 74.sp, fontWeight: FontWeight.w600),
+                ),
+                SizedBox(height: 42.h),
+                Text(
+                  '''Le Hall of Legends respecte la confidentialité des données personnelles. Nous nous conformerons à l'Ordonnance sur les données personnelles (vie privée) Règlement Général sur la Protection des Données UE 2016/679 (« Le Règlement ») et nous nous engageons à mettre pleinement en œuvre les principes de protection des données promulgués en vertu du Règlement. De temps à autre, nous pouvons collecter divers types d'informations personnelles (« informations personnelles » ou « données personnelles ») (telles que l'adresse e-mail, le nom et le numéro de téléphone) auprès de vous dans le cadre de notre fourniture de services, d'activités et d'installations, y compris, mais sans s'y limiter, l'enregistrement d'un compte, la transaction de billetterie, l'abonnement à la newsletter électronique, l'inscription à un événement, l'adhésion, le paiement, le suivi des demandes de renseignements, la réalisation d'enquêtes auprès des clients, la réservation de lieux, les campagnes de financement, la candidature à un emploi et/oun emploi -problèmes connexes, gestion des sous-traitants, etc. Un parent ou un tuteur doit consentir à notre collecte et à notre utilisation des données personnelles des mineurs de moins de 18 ans.''',
+                  textAlign: TextAlign.center,
+                  
+                  style:
+                 (     isDarkMode ? Style.whiteGothamMedium : Style.gothamMedium).copyWith(height: 4.h),
+                ),
+                const Spacer(),
+                OutlinedButton(
+                    onPressed: () async {
+                      await _launchUrl();
+                    },
+                    style: OutlinedButton.styleFrom(
+                      backgroundColor: Palette.primary,
+                      shape: const StadiumBorder(),
+                      side: BorderSide.none,
+                      textStyle: Style.gothamMedium,
+                    ),
+                    child: Text(
+                      "See Details",
+                      style: isDarkMode
+                          ? Style.whiteGothamMedium
+                          : Style.gothamMedium,
+                    ))
+              ],
+            ));
+      },
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(150.r),
+          topRight: Radius.circular(150.r),
+        ),
+      ),
+      isScrollControlled: true,
     );
   }
 
