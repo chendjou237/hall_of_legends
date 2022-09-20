@@ -1,24 +1,25 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:country_pickers/country_picker_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:hall_of_fame/app/features/main/providers/main_providers.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
-
-import 'package:hall_of_fame/app/core/theme/style.dart';
-import 'package:hall_of_fame/app/features/main/data/months.dart';
-import 'package:hall_of_fame/app/features/main/data/years.dart';
-import 'package:hall_of_fame/app/features/main/widget/widgets.dart';
-import 'package:hall_of_fame/l10n/l10n.dart';
 import 'package:intl_phone_field/country_picker_dialog.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:queen_validators/queen_validators.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'package:hall_of_fame/app/core/theme/style.dart';
+import 'package:hall_of_fame/app/features/main/data/months.dart';
+import 'package:hall_of_fame/app/features/main/data/years.dart';
+import 'package:hall_of_fame/app/features/main/providers/main_providers.dart';
+import 'package:hall_of_fame/app/features/main/widget/widgets.dart';
+import 'package:hall_of_fame/l10n/l10n.dart';
+
 import '../../../core/theme/palette.dart';
 import '../data/days.dart';
 import '../model/main_model.dart';
+import '../providers/date_provider.dart';
 
 class MainView extends ConsumerStatefulWidget {
   const MainView({super.key});
@@ -32,12 +33,6 @@ class MainView extends ConsumerStatefulWidget {
 class _MainViewState extends ConsumerState<MainView> {
   final day = "1";
 
-  final liens = [
-    'Famille',
-    'Amicale',
-    'Aucun',
-  ];
-
   @override
   void initState() {
     super.initState();
@@ -46,8 +41,7 @@ class _MainViewState extends ConsumerState<MainView> {
     // init();
   }
 
-  final Uri _url = Uri.parse(
-      'https://halloflegends.online/politique-de-confidentialite.html');
+  final Uri _url = Uri.parse(' https://halloflegends.online/');
 
   Future<void> _launchUrl() async {
     if (!await launchUrl(_url)) {
@@ -57,7 +51,7 @@ class _MainViewState extends ConsumerState<MainView> {
 
   bool _isLoading = false;
 
-  String jourNaissance = "1";
+  String? _jourNaissance;
   String jourDeces = "1";
   String jourEnregistrement = "1";
   String moisNaissance = "1";
@@ -86,16 +80,26 @@ class _MainViewState extends ConsumerState<MainView> {
 
   final countries = ['Cameroun', 'Gabon', 'Congo', 'Tchad', 'Tchad'];
 
-  final _formKey = GlobalKey<FormState>();
+  final _firstFormKey = GlobalKey<FormState>();
+  final _secondFormKey = GlobalKey<FormState>();
 
   late PageController pageController;
 
   @override
   Widget build(BuildContext context) {
+    final liens = [AppLocalizations.of(context)!.famille, AppLocalizations.of(context)!.amicale, AppLocalizations.of(context)!.aucun];
     final database = ref.read(databaseProvider.state);
     var brightness = MediaQuery.of(context).platformBrightness;
     bool isDarkMode = brightness == Brightness.dark;
-
+    final jourD = ref.watch(jourDProvider.notifier);
+    final moisD = ref.watch(moisDProvider.notifier);
+    final anneeD = ref.watch(anneeDProvider.notifier);
+    final jourN = ref.watch(jourNProvider.notifier);
+    final moisN = ref.watch(moisNProvider.notifier);
+    final anneeN = ref.watch(anneeNProvider.notifier);
+    final jourE = ref.watch(jourEProvider.notifier);
+    final moisE = ref.watch(moisEProvider.notifier);
+    final anneeE = ref.watch(anneeEProvider.notifier);
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,
@@ -109,496 +113,533 @@ class _MainViewState extends ConsumerState<MainView> {
           ),
         ),
         padding: EdgeInsets.fromLTRB(93.w, 130.h, 93.w, 30.h),
-        child: Form(
-          key: _formKey,
-          child: PageView(
-            controller: pageController,
-            children: [
-              SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Center(
-                      child: Image.asset(
-                          'assets/images/logo_Hall-Of-Legends-foundation-white.png',
-                          width: 584.23.w,
-                          height: 243.h),
-                    ),
-                    SizedBox(height: 139.h),
-                    Center(
-                      child: Container(
-                        alignment: Alignment.center,
-                        width: 942.w,
-                        height: 117.h,
-                        decoration: BoxDecoration(
-                          color: isDarkMode ? Palette.primary : Palette.black,
+        child: PageView(
+          physics: const NeverScrollableScrollPhysics(),
+          controller: pageController,
+          children: [
+            GestureDetector(
+              onHorizontalDragStart: (drag) {
+                if (_firstFormKey.currentState!.validate()) {
+                  pageController.nextPage(
+                      duration: const Duration(seconds: 1),
+                      curve: Curves.easeIn);
+                } else {
+                  //TODO: loc
+                  Fluttertoast.showToast(
+                      msg: "please field required field",
+                      backgroundColor: Colors.red);
+                }
+              },
+              child: SingleChildScrollView(
+                child: Form(
+                  key: _firstFormKey,
+                  autovalidateMode: AutovalidateMode.always,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                        child: Image.asset(
+                            'assets/images/logo_Hall-Of-Legends-foundation-white.png',
+                            width: 584.23.w,
+                            height: 243.h),
+                      ),
+                      SizedBox(height: 139.h),
+                      Center(
+                        child: Container(
+                          alignment: Alignment.center,
+                          width: 942.w,
+                          height: 117.h,
+                          decoration: BoxDecoration(
+                            color: isDarkMode ? Palette.primary : Palette.black,
+                          ),
+                          child: Text(
+                            AppLocalizations.of(context)!
+                                .formulaireDeNomination,
+                            style: isDarkMode
+                                ? Style.gothamMedium
+                                : Style.primaryGothamMedium,
+                          ),
                         ),
-                        child: Text(
-                          AppLocalizations.of(context)!.formulaireDeNomination,
+                      ),
+                      SizedBox(
+                        height: 124.h,
+                      ),
+                      MainField(
+                        title: AppLocalizations.of(context)!.nomDuCandidat,
+                        hint: AppLocalizations.of(context)!.nomsEtPrenoms,
+                        controller: nameController,
+                      ),
+                      SizedBox(height: 74.8.h),
+                      MainField(
+                        hint: AppLocalizations.of(context)!
+                            .selectionnerLeDomaineDeRealisation,
+                        title: AppLocalizations.of(context)!.titreOuProfession,
+                        controller: titleController,
+                      ),
+                      SizedBox(
+                        height: 109.h,
+                      ),
+                      Text(
+                          AppLocalizations.of(context)!
+                              .dateDeNaissanceDuCandidat,
                           style: isDarkMode
-                              ? Style.gothamMedium
-                              : Style.primaryGothamMedium,
+                              ? Style.whiteGothamMedium
+                              : Style.gothamMedium),
+                      SizedBox(
+                        height: 17.h,
+                      ),
+                      Row(
+                        children: [
+                          DateField(
+                            hint: AppLocalizations.of(context)!.jour,
+                            items: days,
+                            value: jourN,
+                          ),
+                          SizedBox(width: 114.w),
+                          DateField(
+                            hint: AppLocalizations.of(context)!.mois,
+                            // value: moisNaissance,
+                            items: months,
+                            value: moisN,
+                          ),
+                          SizedBox(width: 93.4.w),
+                          DateField(
+                            hint: AppLocalizations.of(context)!.annee,
+                            items: years,
+                            value: anneeN,
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 109.h),
+                      Text(
+                          AppLocalizations.of(context)!
+                              .dateDeDecesDuCandidatLeCasEcheant,
+                          style: isDarkMode
+                              ? Style.whiteGothamMedium
+                              : Style.gothamMedium),
+                      SizedBox(height: 18.h),
+                      Row(
+                        children: [
+                          DateField(
+                            hint: AppLocalizations.of(context)!.jour,
+                            items: days,
+                            value: jourD,
+                          ),
+                          SizedBox(width: 114.w),
+                          DateField(
+                            hint: AppLocalizations.of(context)!.mois,
+                            items: months,
+                            value: moisD,
+                          ),
+                          SizedBox(width: 93.4.w),
+                          DateField(
+                            hint: AppLocalizations.of(context)!.annee,
+                            items: years,
+                            value: anneeD,
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 86.h),
+                      Text(AppLocalizations.of(context)!.biographieDuCandidat,
+                          style: isDarkMode
+                              ? Style.whiteGothamMedium
+                              : Style.gothamMedium),
+                      SizedBox(height: 12.h),
+                      Container(
+                        width: 1090.34.w,
+                        height: 685.44.h,
+                        padding: EdgeInsets.symmetric(horizontal: 21.w),
+                        decoration: BoxDecoration(
+                          color:
+                              isDarkMode ? Palette.dark : Palette.lightPrimary,
+                          borderRadius: BorderRadius.circular(32.34.r),
+                          border: Border.all(color: Palette.primary),
+                        ),
+                        child: TextFormField(
+                          controller: bioController,
+                          keyboardType: TextInputType.multiline,
+                          maxLines: null,
+                          style: (isDarkMode
+                                  ? Style.whiteGothamLight
+                                  : Style.darkGothamLight)
+                              .copyWith(height: 4.h),
+                          cursorColor:
+                              isDarkMode ? Palette.hintColor : Palette.dark,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            focusColor: Palette.hintColor,
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 124.h,
-                    ),
-                    MainField(
-                      title: AppLocalizations.of(context)!.nomDuCandidat,
-                      hint: AppLocalizations.of(context)!.nomsEtPrenoms,
-                      controller: nameController,
-                    ),
-                    SizedBox(height: 74.8.h),
-                    MainField(
-                      hint: AppLocalizations.of(context)!
-                          .selectionnerLeDomaineDeRealisation,
-                      title: AppLocalizations.of(context)!.titreOuProfession,
-                      controller: titleController,
-                    ),
-                    SizedBox(
-                      height: 109.h,
-                    ),
-                    Text(
-                        AppLocalizations.of(context)!.dateDeNaissanceDuCandidat,
-                        style: isDarkMode
-                            ? Style.whiteGothamMedium
-                            : Style.gothamMedium),
-                    SizedBox(
-                      height: 17.h,
-                    ),
-                    Row(
-                      children: [
-                        DateField(
-                          hint: AppLocalizations.of(context)!.jour,
-                          items: days,
-                          value: jourNaissance,
-                        ),
-                        SizedBox(width: 114.w),
-                        DateField(
-                          hint: AppLocalizations.of(context)!.mois,
-                          value: moisNaissance,
-                          items: months,
-                        ),
-                        SizedBox(width: 93.4.w),
-                        DateField(
-                          hint: AppLocalizations.of(context)!.annee,
-                          items: years,
-                          value: anneeNaissance,
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 109.h),
-                    Text(
-                        AppLocalizations.of(context)!
-                            .dateDeDecesDuCandidatLeCasEcheant,
-                        style: isDarkMode
-                            ? Style.whiteGothamMedium
-                            : Style.gothamMedium),
-                    SizedBox(height: 18.h),
-                    Row(
-                      children: [
-                        DateField(
-                          hint: AppLocalizations.of(context)!.jour,
-                          items: days,
-                          value: jourDeces,
-                        ),
-                        SizedBox(width: 114.w),
-                        DateField(
-                          hint: AppLocalizations.of(context)!.mois,
-                          items: months,
-                          value: moisDeces,
-                        ),
-                        SizedBox(width: 93.4.w),
-                        DateField(
-                          hint: AppLocalizations.of(context)!.annee,
-                          items: years,
-                          value: anneeDeces,
-                        )
-                      ],
-                    ),
-                    SizedBox(height: 86.h),
-                    Text(AppLocalizations.of(context)!.biographieDuCandidat,
-                        style: isDarkMode
-                            ? Style.whiteGothamMedium
-                            : Style.gothamMedium),
-                    SizedBox(height: 12.h),
-                    Container(
-                      width: 1090.34.w,
-                      height: 685.44.h,
-                      padding: EdgeInsets.symmetric(horizontal: 21.w),
-                      decoration: BoxDecoration(
-                        color: isDarkMode ? Palette.dark : Palette.lightPrimary,
-                        borderRadius: BorderRadius.circular(32.34.r),
-                        border: Border.all(color: Palette.primary),
-                      ),
-                      child: TextFormField(
-                        controller: bioController,
-                        keyboardType: TextInputType.multiline,
-                        maxLines: null,
-                        style: (isDarkMode
-                                ? Style.whiteGothamLight
-                                : Style.darkGothamLight)
-                            .copyWith(height: 4.h),
-                        cursorColor:
-                            isDarkMode ? Palette.hintColor : Palette.dark,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          focusColor: Palette.hintColor,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 86.h),
-                  ],
+                      SizedBox(height: 86.h),
+                    ],
+                  ),
                 ),
               ),
-              SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    MainField(
-                      controller: submitController,
-                      title:
-                          AppLocalizations.of(context)!.candidatureSoumisePar,
-                      hint: AppLocalizations.of(context)!.nomsEtPrenoms,
-                    ),
-                    SizedBox(height: 78.h),
-                    Text(
-                      AppLocalizations.of(context)!.dateDenregistrement,
-                      style: isDarkMode
-                          ? Style.whiteGothamMedium
-                          : Style.gothamMedium,
-                    ),
-                    SizedBox(
-                      height: 28.h,
-                    ),
-                    Row(
-                      children: [
-                        DateField(
-                          hint: AppLocalizations.of(context)!.jour,
-                          items: days,
-                          value: jourEnregistrement,
-                        ),
-                        SizedBox(width: 114.w),
-                        DateField(
-                          hint: AppLocalizations.of(context)!.mois,
-                          items: months,
-                          value: moisEnregistrement,
-                        ),
-                        SizedBox(width: 93.4.w),
-                        DateField(
-                          hint: AppLocalizations.of(context)!.annee,
-                          items: years,
-                          value: anneeEnregistrement,
-                        )
-                      ],
-                    ),
-                    SizedBox(height: 109.h),
-                    Text(
-                      AppLocalizations.of(context)!.lienAvecLeCandidat,
-                      style: isDarkMode
-                          ? Style.whiteGothamMedium
-                          : Style.gothamMedium,
-                    ),
-                    SizedBox(
-                      height: 15.6.h,
-                    ),
-                    HallDropDown(
-                      items: liens,
-                      hint: AppLocalizations.of(context)!
-                          .selectionnerVotreLienAvecLeCandidat,
-                      value: link,
-                    ),
-                    SizedBox(height: 63.h),
-                    Text(AppLocalizations.of(context)!.votrePays,
+            ),
+            GestureDetector(
+              onHorizontalDragEnd: (drag) {
+                pageController.previousPage(
+                    duration: const Duration(seconds: 1), curve: Curves.ease);
+              },
+              child: SingleChildScrollView(
+                child: Form(
+                  key: _secondFormKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      MainField(
+                        controller: submitController,
+                        title:
+                            AppLocalizations.of(context)!.candidatureSoumisePar,
+                        hint: AppLocalizations.of(context)!.nomsEtPrenoms,
+                      ),
+                      SizedBox(height: 78.h),
+                      Text(
+                        AppLocalizations.of(context)!.dateDenregistrement,
                         style: isDarkMode
                             ? Style.whiteGothamMedium
-                            : Style.gothamMedium),
-                    SizedBox(height: 15.h),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 29.w),
-                      decoration: BoxDecoration(
-                          color:
-                              isDarkMode ? Palette.dark : Palette.lightPrimary,
-                          border: Border.all(color: Palette.primary),
-                          borderRadius: BorderRadius.circular(32.34.r)),
-                      child: CountryPickerDropdown(
-                        onValuePicked: (value) {
-                          Fluttertoast.showToast(msg: value.name);
-                          pays = value.name;
-                        },
-                        hint: Text(
-                          AppLocalizations.of(context)!.selectionnerVotrePays,
+                            : Style.gothamMedium,
+                      ),
+                      SizedBox(
+                        height: 28.h,
+                      ),
+                      Row(
+                        children: [
+                          DateField(
+                            hint: AppLocalizations.of(context)!.jour,
+                            items: days,
+                            value: jourE,
+                          ),
+                          SizedBox(width: 114.w),
+                          DateField(
+                            hint: AppLocalizations.of(context)!.mois,
+                            items: months,
+                            value: moisE,
+                          ),
+                          SizedBox(width: 93.4.w),
+                          DateField(
+                            hint: AppLocalizations.of(context)!.annee,
+                            items: years,
+                            value: anneeE,
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 109.h),
+                      Text(
+                        AppLocalizations.of(context)!.lienAvecLeCandidat,
+                        style: isDarkMode
+                            ? Style.whiteGothamMedium
+                            : Style.gothamMedium,
+                      ),
+                      SizedBox(
+                        height: 15.6.h,
+                      ),
+                      HallDropDown(
+                        items: liens,
+                        hint: AppLocalizations.of(context)!
+                            .selectionnerVotreLienAvecLeCandidat,
+                      ),
+                      SizedBox(height: 63.h),
+                      Text(AppLocalizations.of(context)!.votrePays,
+                          style: isDarkMode
+                              ? Style.whiteGothamMedium
+                              : Style.gothamMedium),
+                      SizedBox(height: 15.h),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 29.w),
+                        decoration: BoxDecoration(
+                            color: isDarkMode
+                                ? Palette.dark
+                                : Palette.lightPrimary,
+                            border: Border.all(color: Palette.primary),
+                            borderRadius: BorderRadius.circular(32.34.r)),
+                        child: CountryPickerDropdown(
+                          onValuePicked: (value) {
+                            Fluttertoast.showToast(msg: value.name);
+                            pays = value.name;
+                          },
+                          hint: Text(
+                            AppLocalizations.of(context)!.selectionnerVotrePays,
+                            style: isDarkMode
+                                ? Style.whiteGothamLight
+                                : Style.darkGothamLight,
+                          ),
+                          itemBuilder: (country) => Text(
+                            country.name,
+                            style: isDarkMode
+                                ? Style.whiteGothamLight
+                                : Style.darkGothamLight,
+                          ),
+                          isExpanded: true,
+                          dropdownColor:
+                              isDarkMode ? Palette.dark : Palette.white,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 49.h,
+                      ),
+                      Text(AppLocalizations.of(context)!.numeroDeTelephone,
+                          style: isDarkMode
+                              ? Style.whiteGothamMedium
+                              : Style.gothamMedium),
+                      SizedBox(
+                        height: 15.h,
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 29.w,
+                        ),
+                        decoration: BoxDecoration(
+                            color: isDarkMode
+                                ? Palette.dark
+                                : Palette.lightPrimary,
+                            border: Border.all(color: Palette.primary),
+                            borderRadius: BorderRadius.circular(32.34.r)),
+                        child: IntlPhoneField(
+                          showDropdownIcon: false,
+                          controller: telController,
+                          onCountryChanged: (country) {
+                            setState(() {
+                              print(telController.text);
+                            });
+                          },
+                          textAlignVertical: TextAlignVertical.center,
+                          pickerDialogStyle: PickerDialogStyle(
+                            backgroundColor:
+                                isDarkMode ? Palette.dark : Palette.white,
+                            countryCodeStyle: isDarkMode
+                                ? Style.whiteGothamLight
+                                : Style.darkGothamLight,
+                            countryNameStyle: isDarkMode
+                                ? Style.whiteGothamLight
+                                : Style.darkGothamLight,
+                          ),
                           style: isDarkMode
                               ? Style.whiteGothamLight
                               : Style.darkGothamLight,
+                          dropdownTextStyle: isDarkMode
+                              ? Style.whiteGothamLight
+                              : Style.darkGothamLight,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            isDense: true,
+                          ),
                         ),
-                        itemBuilder: (country) => Text(
-                          country.name,
+                      ),
+                      SizedBox(height: 49.h),
+                      Text(
+                        AppLocalizations.of(context)!
+                            .confirmerLeNumeroDeTelephone,
+                        style: isDarkMode
+                            ? Style.whiteGothamLight
+                            : Style.darkGothamLight,
+                      ),
+                      SizedBox(height: 12.h),
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 29.w,
+                        ),
+                        decoration: BoxDecoration(
+                            color: isDarkMode
+                                ? Palette.dark
+                                : Palette.lightPrimary,
+                            border: Border.all(color: Palette.primary),
+                            borderRadius: BorderRadius.circular(32.34.r)),
+                        child: IntlPhoneField(
+                          showDropdownIcon: false,
+                          controller: confirmTelController,
+                          validator: (value) {
+                            setState(() {
+                              
+                            });
+                            if (value == null) {
+                              return AppLocalizations.of(context)!
+                                  .veuillezEntrerDesValeurs;
+                            }
+                            if (value.completeNumber != telController.text) {
+                              return AppLocalizations.of(context)!
+                                  .lesDeuxNumerosNeCorrespondentPas;
+                            }
+                            return null;
+                          },
+                          textAlignVertical: TextAlignVertical.center,
+                          pickerDialogStyle: PickerDialogStyle(
+                            backgroundColor:
+                                isDarkMode ? Palette.dark : Palette.white,
+                            countryCodeStyle: isDarkMode
+                                ? Style.whiteGothamLight
+                                : Style.darkGothamLight,
+                            countryNameStyle: isDarkMode
+                                ? Style.whiteGothamLight
+                                : Style.darkGothamLight,
+                          ),
                           style: isDarkMode
                               ? Style.whiteGothamLight
                               : Style.darkGothamLight,
-                        ),
-                        isExpanded: true,
-                        dropdownColor:
-                            isDarkMode ? Palette.dark : Palette.white,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 49.h,
-                    ),
-                    Text(AppLocalizations.of(context)!.numeroDeTelephone,
-                        style: isDarkMode
-                            ? Style.whiteGothamMedium
-                            : Style.gothamMedium),
-                    SizedBox(
-                      height: 15.h,
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 29.w,
-                      ),
-                      decoration: BoxDecoration(
-                          color:
-                              isDarkMode ? Palette.dark : Palette.lightPrimary,
-                          border: Border.all(color: Palette.primary),
-                          borderRadius: BorderRadius.circular(32.34.r)),
-                      child: IntlPhoneField(
-                        showDropdownIcon: false,
-                        controller: telController,
-                        onCountryChanged: (country) {
-                          setState(() {
-                            print(telController.text);
-                          });
-                        },
-                        textAlignVertical: TextAlignVertical.center,
-                        pickerDialogStyle: PickerDialogStyle(
-                          backgroundColor:
-                              isDarkMode ? Palette.dark : Palette.white,
-                          countryCodeStyle: isDarkMode
+                          dropdownTextStyle: isDarkMode
                               ? Style.whiteGothamLight
                               : Style.darkGothamLight,
-                          countryNameStyle: isDarkMode
-                              ? Style.whiteGothamLight
-                              : Style.darkGothamLight,
-                        ),
-                        style: isDarkMode
-                            ? Style.whiteGothamLight
-                            : Style.darkGothamLight,
-                        dropdownTextStyle: isDarkMode
-                            ? Style.whiteGothamLight
-                            : Style.darkGothamLight,
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          isDense: true,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            isDense: true,
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(height: 49.h),
-                    Text(
-                      AppLocalizations.of(context)!
-                          .confirmerLeNumeroDeTelephone,
-                      style: isDarkMode
-                          ? Style.whiteGothamLight
-                          : Style.darkGothamLight,
-                    ),
-                    SizedBox(height: 12.h),
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 29.w,
+                      SizedBox(
+                        height: 66.7.h,
                       ),
-                      decoration: BoxDecoration(
-                          color:
-                              isDarkMode ? Palette.dark : Palette.lightPrimary,
-                          border: Border.all(color: Palette.primary),
-                          borderRadius: BorderRadius.circular(32.34.r)),
-                      child: IntlPhoneField(
-                        showDropdownIcon: false,
-                        controller: confirmTelController,
-                        validator: (value) {
-                          if (value == null) {
-                            return AppLocalizations.of(context)!
-                                .veuillezEntrerDesValeurs;
-                          }
-                          if (value.completeNumber != telController.text) {
-                            return AppLocalizations.of(context)!
-                                .lesDeuxNumerosNeCorrespondentPas;
-                          }
-                          return null;
-                        },
-                        textAlignVertical: TextAlignVertical.center,
-                        pickerDialogStyle: PickerDialogStyle(
-                          backgroundColor:
-                              isDarkMode ? Palette.dark : Palette.white,
-                          countryCodeStyle: isDarkMode
-                              ? Style.whiteGothamLight
-                              : Style.darkGothamLight,
-                          countryNameStyle: isDarkMode
-                              ? Style.whiteGothamLight
-                              : Style.darkGothamLight,
-                        ),
-                        style: isDarkMode
-                            ? Style.whiteGothamLight
-                            : Style.darkGothamLight,
-                        dropdownTextStyle: isDarkMode
-                            ? Style.whiteGothamLight
-                            : Style.darkGothamLight,
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          isDense: true,
-                        ),
+                      MainField(
+                          hint: AppLocalizations.of(context)!
+                              .veuillezEntrerVotreAdresseEmail,
+                          controller: emailController,
+                          validator:  IsEmail(AppLocalizations.of(context)!.emailError),
+                          title: AppLocalizations.of(context)!.adresseEmail),
+                      SizedBox(
+                        height: 40.h,
                       ),
-                    ),
-                    SizedBox(
-                      height: 66.7.h,
-                    ),
-                    MainField(
-                        hint: AppLocalizations.of(context)!
-                            .veuillezEntrerVotreAdresseEmail,
-                        controller: emailController,
-                        validator: const IsEmail(),
-                        title: AppLocalizations.of(context)!.adresseEmail),
-                    SizedBox(
-                      height: 40.h,
-                    ),
-                    MainField(
-                        hint: AppLocalizations.of(context)!
-                            .veuillezConfirmerVotreAdresseEmail,
-                        controller: confirmEmailController,
-                        validator: IsRequired(),
-                        confirm: emailController,
-                        title: AppLocalizations.of(context)!
-                            .confirmerLadresseMail),
-                    SizedBox(
-                      height: 122.7.h,
-                    ),
-                    Center(
-                      child: _isLoading
-                          ? CircularProgressIndicator(
-                              color: Palette.primary,
-                            )
-                          : OutlinedButton(
-                              onPressed: () async {
-                                setState(() {
-                                  _isLoading = true;
-                                });
-                                if (!_formKey.currentState!.validate()) {
-                                  Fluttertoast.showToast(
-                                    msg: AppLocalizations.of(context)!
-                                        .veuillezRemplirLesInformationsNecessaire,
-                                    backgroundColor: Palette.failed,
-                                  );
-                                } else {
-                                  Fluttertoast.showToast(
-                                    msg: AppLocalizations.of(context)!
-                                        .verifieAvecSucces,
-                                    backgroundColor: Palette.success,
-                                  );
-                                  final model = MainModel(
-                                      noms: nameController.text,
-                                      profession: titleController.text,
-                                      dateDeNaissance: DateTime(
-                                          int.parse(anneeNaissance),
-                                          int.parse(moisNaissance),
-                                          int.parse(jourNaissance)),
-                                      dateDeDeces: DateTime(
-                                          int.parse(anneeDeces),
-                                          int.parse(moisDeces),
-                                          int.parse(jourDeces)),
-                                      bioGraphie: bioController.text,
-                                      soumisPar: submitController.text,
-                                      dateEnregistrement: DateTime(
-                                        int.parse(anneeEnregistrement),
-                                        int.parse(moisEnregistrement),
-                                        int.parse(jourDeces),
-                                      ),
-                                      lienAvecLeCandidat: link,
-                                      pays: pays,
-                                      numeroDeTelephone: telController.text,
-                                      email: emailController.text);
-                                  if (await database.state.createForm(model)) {
-                                    AwesomeDialog(
-                                      context: context,
-                                      dialogType: DialogType.success,
-                                      animType: AnimType.scale,
-                                      titleTextStyle: isDarkMode
-                                          ? Style.primaryGothamMedium
-                                          : Style.gothamMedium,
-                                      descTextStyle: isDarkMode
-                                          ? Style.whiteGothamMedium
-                                          : Style.gothamMedium,
-                                      title: AppLocalizations.of(context)!
-                                          .felicitation,
-                                      dialogBackgroundColor: isDarkMode
-                                          ? Palette.dark
-                                          : Palette.white,
-                                      desc: AppLocalizations.of(context)!
-                                          .vosResponseOntBienEteEnregistrer,
-                                      btnOkOnPress: () {},
-                                    ).show();
-
-                                    setState(() {
-                                      reset();
-                                      pageController.previousPage(
-                                          duration: const Duration(seconds: 1),
-                                          curve: Curves.bounceOut);
-                                    });
+                      MainField(
+                          hint: AppLocalizations.of(context)!
+                              .veuillezConfirmerVotreAdresseEmail,
+                          controller: confirmEmailController,
+                          validator: IsRequired(),
+                          confirm: emailController,
+                          title: AppLocalizations.of(context)!
+                              .confirmerLadresseMail),
+                      SizedBox(
+                        height: 122.7.h,
+                      ),
+                      Center(
+                        child: _isLoading
+                            ? CircularProgressIndicator(
+                                color: Palette.primary,
+                              )
+                            : OutlinedButton(
+                                onPressed: () async {
+                                  setState(() {
+                                    _isLoading = true;
+                                  });
+                                  if (!_firstFormKey.currentState!.validate()) {
+                                    Fluttertoast.showToast(
+                                      msg: AppLocalizations.of(context)!
+                                          .veuillezRemplirLesInformationsNecessaire,
+                                      backgroundColor: Palette.failed,
+                                    );
                                   } else {
-                                    Fluttertoast.showToast(msg: "echec");
+                                    Fluttertoast.showToast(
+                                      msg: AppLocalizations.of(context)!
+                                          .verifieAvecSucces,
+                                      backgroundColor: Palette.success,
+                                    );
+                                    final model = MainModel(
+                                        noms: nameController.text,
+                                        profession: titleController.text,
+                                        dateDeNaissance: DateTime(
+                                            int.parse(anneeN.state!),
+                                            int.parse(moisN.state!),
+                                            int.parse(jourN.state!)),
+                                        dateDeDeces: DateTime(
+                                            int.parse(anneeD.state!),
+                                            int.parse(moisD.state!),
+                                            int.parse(jourD.state!)),
+                                        bioGraphie: bioController.text,
+                                        soumisPar: submitController.text,
+                                        dateEnregistrement: DateTime(
+                                          int.parse(anneeE.state!),
+                                          int.parse(moisE.state!),
+                                          int.parse(jourE.state!),
+                                        ),
+                                        lienAvecLeCandidat: link,
+                                        pays: pays,
+                                        numeroDeTelephone: telController.text,
+                                        email: emailController.text);
+                                    if (await database.state
+                                        .createForm(model)) {
+                                      AwesomeDialog(
+                                        context: context,
+                                        dialogType: DialogType.success,
+                                        animType: AnimType.scale,
+                                        titleTextStyle: isDarkMode
+                                            ? Style.primaryGothamMedium
+                                            : Style.gothamMedium,
+                                        descTextStyle: isDarkMode
+                                            ? Style.whiteGothamMedium
+                                            : Style.gothamMedium,
+                                        title: AppLocalizations.of(context)!
+                                            .felicitation,
+                                        dialogBackgroundColor: isDarkMode
+                                            ? Palette.dark
+                                            : Palette.white,
+                                        desc: AppLocalizations.of(context)!
+                                            .vosResponseOntBienEteEnregistrer,
+                                        btnOkOnPress: () {},
+                                      ).show();
+
+                                      setState(() {
+                                        reset();
+                                        pageController.previousPage(
+                                            duration:
+                                                const Duration(seconds: 1),
+                                            curve: Curves.bounceOut);
+                                      });
+                                    } else {
+                                      Fluttertoast.showToast(msg: "echec");
+                                    }
                                   }
-                                }
-                                setState(() {
-                                  _isLoading = false;
-                                });
-                              },
-                              style: OutlinedButton.styleFrom(
-                                backgroundColor: Palette.primary,
-                                shape: const StadiumBorder(),
-                                side: BorderSide.none,
-                                textStyle: Style.gothamMedium,
+                                  setState(() {
+                                    _isLoading = false;
+                                  });
+                                },
+                                style: OutlinedButton.styleFrom(
+                                  backgroundColor: Palette.primary,
+                                  shape: const StadiumBorder(),
+                                  side: BorderSide.none,
+                                  textStyle: Style.gothamMedium,
+                                ),
+                                child: Text(
+                                  AppLocalizations.of(context)!
+                                      .enregistrerEtEnvoyer,
+                                  style: isDarkMode
+                                      ? Style.whiteGothamMedium
+                                      : Style.gothamMedium,
+                                ),
                               ),
-                              child: Text(
-                                AppLocalizations.of(context)!
-                                    .enregistrerEtEnvoyer,
-                                style: isDarkMode
-                                    ? Style.whiteGothamMedium
-                                    : Style.gothamMedium,
-                              ),
-                            ),
-                    ),
-                    SizedBox(height: 42.h),
-                    Center(
-                      child: OutlinedButton(
-                        onPressed: () async {
-                          showConfidentialPolytics();
-                        },
-                        style: OutlinedButton.styleFrom(
-                          backgroundColor: Colors.transparent,
-                          shape: const StadiumBorder(),
-                          side: BorderSide(color: Palette.primary, width: 3.w),
-                        ),
-                        child: Text(
-                          "politique de confidenialité",
-                          style: Style.whiteGothamLight
-                              .copyWith(color: Palette.primary),
+                      ),
+                      SizedBox(height: 42.h),
+                      Center(
+                        child: OutlinedButton(
+                          onPressed: () async {
+                            showConfidentialPolytics();
+                          },
+                          style: OutlinedButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                            shape: const StadiumBorder(),
+                            side:
+                                BorderSide(color: Palette.primary, width: 3.w),
+                          ),
+                          child: Text(
+                            AppLocalizations.of(context)!.politics,
+                            style: Style.whiteGothamLight
+                                .copyWith(color: Palette.primary),
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 111.h,
-                    ),
-                    Center(
-                      child: Image.asset(
-                        'assets/images/logo_Hall-Of-Legends-white.png',
-                        width: 329.81.w,
-                        height: 136.43.h,
+                      SizedBox(
+                        height: 111.h,
                       ),
-                    ),
-                  ],
+                      Center(
+                        child: Image.asset(
+                          'assets/images/logo_Hall-Of-Legends-white.png',
+                          width: 329.81.w,
+                          height: 136.43.h,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
       ),
     );
@@ -612,7 +653,7 @@ class _MainViewState extends ConsumerState<MainView> {
         bool isDarkMode = brightness == Brightness.dark;
 
         return Container(
-            padding: EdgeInsets.symmetric(vertical: 72.h, horizontal: 32.w),
+            padding: EdgeInsets.symmetric(vertical: 84.h, horizontal: 32.w),
             decoration: BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage(isDarkMode
@@ -624,11 +665,11 @@ class _MainViewState extends ConsumerState<MainView> {
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(150.r),
                     topRight: Radius.circular(150.r))),
-            height: MediaQuery.of(context).size.height * 0.5,
+            height: MediaQuery.of(context).size.height * 0.6,
             child: Column(
               children: [
                 Text(
-                  "politique de confidenialité",
+                  AppLocalizations.of(context)!.politics,
                   style: isDarkMode
                       ? Style.gothamMedium.copyWith(
                           color: Palette.white,
@@ -639,11 +680,12 @@ class _MainViewState extends ConsumerState<MainView> {
                 ),
                 SizedBox(height: 42.h),
                 Text(
-                  '''Le Hall of Legends respecte la confidentialité des données personnelles. Nous nous conformerons à l'Ordonnance sur les données personnelles (vie privée) Règlement Général sur la Protection des Données UE 2016/679 (« Le Règlement ») et nous nous engageons à mettre pleinement en œuvre les principes de protection des données promulgués en vertu du Règlement. De temps à autre, nous pouvons collecter divers types d'informations personnelles (« informations personnelles » ou « données personnelles ») (telles que l'adresse e-mail, le nom et le numéro de téléphone) auprès de vous dans le cadre de notre fourniture de services, d'activités et d'installations, y compris, mais sans s'y limiter, l'enregistrement d'un compte, la transaction de billetterie, l'abonnement à la newsletter électronique, l'inscription à un événement, l'adhésion, le paiement, le suivi des demandes de renseignements, la réalisation d'enquêtes auprès des clients, la réservation de lieux, les campagnes de financement, la candidature à un emploi et/oun emploi -problèmes connexes, gestion des sous-traitants, etc. Un parent ou un tuteur doit consentir à notre collecte et à notre utilisation des données personnelles des mineurs de moins de 18 ans.''',
+                  AppLocalizations.of(context)!.politicsText,
                   textAlign: TextAlign.center,
-                  
-                  style:
-                 (     isDarkMode ? Style.whiteGothamMedium : Style.gothamMedium).copyWith(height: 4.h),
+                  style: (isDarkMode
+                          ? Style.whiteGothamMedium
+                          : Style.gothamMedium)
+                      .copyWith(height: 4.h),
                 ),
                 const Spacer(),
                 OutlinedButton(
@@ -657,7 +699,7 @@ class _MainViewState extends ConsumerState<MainView> {
                       textStyle: Style.gothamMedium,
                     ),
                     child: Text(
-                      "See Details",
+                      AppLocalizations.of(context)!.voirPlus,
                       style: isDarkMode
                           ? Style.whiteGothamMedium
                           : Style.gothamMedium,
@@ -690,7 +732,7 @@ class _MainViewState extends ConsumerState<MainView> {
   }
 
   void reset() {
-    jourNaissance = "1";
+    _jourNaissance = "1";
     jourDeces = "1";
     jourEnregistrement = "1";
     moisNaissance = "1";

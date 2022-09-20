@@ -33,7 +33,7 @@ bool isDarkMode = brightness == Brightness.dark;
         height: MediaQuery.of(context).size.height,
         decoration: const BoxDecoration(
           image: DecorationImage(
-              image: AssetImage('assets/images/splahscreen.png'), fit: BoxFit.fill),
+              image: AssetImage('assets/images/splashscreen.png'), fit: BoxFit.fill),
 
         ),
         alignment: Alignment.bottomCenter,
