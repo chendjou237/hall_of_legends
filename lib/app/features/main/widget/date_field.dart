@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/theme/theme.dart';
 
@@ -8,11 +9,11 @@ class DateField extends StatefulWidget {
     Key? key,
     required this.hint,
     required this.items,
-    required this.value,
+    this.value,
   }) : super(key: key);
   String hint;
   List<String> items;
-  String value;
+  StateController<String?>? value;
 
   @override
   State<DateField> createState() => _DateFieldState();
@@ -23,24 +24,37 @@ class _DateFieldState extends State<DateField> {
   Widget build(BuildContext context) {
     var brightness = MediaQuery.of(context).platformBrightness;
     bool isDarkMode = brightness == Brightness.dark;
+
     return Container(
-      height: 103.h,
-      padding: EdgeInsets.symmetric(horizontal: 23.w),
+      height: 100.h,
+      width: 260.w,
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(32.r),
           border: Border.all(color: Palette.primary),
           color: isDarkMode ? Colors.transparent : Palette.lightPrimary),
-      child: DropdownButton(
+      child: DropdownButtonFormField(
         // isExpanded: true,
-        value: widget.value,
+        value: widget.value?.state,
+
         dropdownColor: isDarkMode ? Palette.dark : Palette.primary,
-        underline: const SizedBox(),
-        hint: SizedBox(
-          width: 140.w,
-          child: Text(
-            widget.hint,
-            style: Style.gothamLight,
-          ),
+        validator: (val) {
+          if (val == null) {
+            //TODO: loc
+            return "please enter a correct value";
+          }
+          return null;
+        },
+        isDense: true,
+
+        decoration: InputDecoration(
+          hintText: widget.hint,
+          isCollapsed: true,
+        ),
+
+        hint: Text(
+          widget.hint,
+          style: Style.gothamLight,
         ),
         style: isDarkMode ? Style.whiteGothamLight : Style.darkGothamLight,
         icon: Icon(Icons.arrow_drop_down,
@@ -52,9 +66,11 @@ class _DateFieldState extends State<DateField> {
                 ))
             .toList(),
         onChanged: (newValue) {
-          setState(() {
-            widget.value = newValue.toString();
-          });
+          if (newValue != null) {
+            setState(() {
+              widget.value?.state = newValue.toString();
+            });
+          }
         },
       ),
     );

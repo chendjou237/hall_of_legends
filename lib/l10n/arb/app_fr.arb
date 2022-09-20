@@ -21,9 +21,9 @@
 
    "biographieDuCandidat": "Biographie du candidat",
 
-   "max250Caracteres" : "max 250 caractères",
+   "max250Caracteres" : "Max 250 caractères",
 
-    "selectionnerVotreLienAvecLeCandidat":"Sélectionner votre lien avec le candidat",  
+    "selectionnerVotreLienAvecLeCandidat":"L’adresse e-mail ne correspond pas",  
     
     "selectionnerVotrePays": "Sélectionner votre pays",
 
@@ -54,7 +54,7 @@
 
   "enregistrerEtEnvoyer": "ENREGISTRER ET ENVOYER",
   
-  "vosResponseOntBienEteEnregistrer": "Vos response ont bien été enregistrer",
+  "vosResponseOntBienEteEnregistrer": "Vos réponses ont été enregistrées",
 
   "felicitation": "Felicitation",
 
@@ -66,7 +66,16 @@
 
  "veuillezEntrerDesValeurs": "Veuillez entrer des valeurs"
 
+,
+"politicsText": "Le Hall of Legends respecte la confidentialité des données personnelles. Nous nous conformerons à l'Ordonnance sur les données personnelles (vie privée) Règlement général sur la protection des données UE 2016/679 ('Le Règlement') et nous nous engageons à mettre pleinement en œuvre les principes de protection des données promulgués en vertu du Règlement. De temps à autre, nous pouvons collecter divers types d'informations personnelles ('Informations personnelles' ou 'Données personnelles') (telles que l'adresse e-mail, le nom et le numéro de téléphone) auprès de vous dans le cadre de nos services, activités et installations, y compris, mais sans s'y limiter, l'enregistrement d'un compte, la transaction de billetterie, l'abonnement à la newsletter par e-mail, l'inscription à un événement, l'adhésion, le paiement, le suivi des demandes, la réalisation d'enquêtes auprès des clients, la réservation de lieux, la collecte de fonds, la candidature à un emploi et/ou les problèmes liés à l'emploi, la gestion des fonds -sous-traitants, etc. Un parent ou un tuteur doit consentir à notre collecte et à notre utilisation des données personnelles des mineurs de moins de 18 ans.",
+"politics": "Privacy Policy",
 
+"voirPlus": "Plus de Detail",
+
+  "famille": "Famille",
+  "amicale": "Amicale",
+  "aucun": "Aucun",
+  "emailError": "L’adresse e-mail ne correspond pas"
 
 
 

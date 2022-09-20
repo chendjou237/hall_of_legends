@@ -7,13 +7,13 @@ class HallDropDown extends StatefulWidget {
   HallDropDown({
     Key? key,
     required this.items,
-    required this.value,
+    
     required this.hint,
   }) : super(key: key);
 
   final List<String> items;
   final String hint;
-  String value;
+  String? value;
 
   @override
   State<HallDropDown> createState() => _HallDropDownState();
