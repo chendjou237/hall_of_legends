@@ -41,7 +41,7 @@ class _MainViewState extends ConsumerState<MainView> {
     // init();
   }
 
-  final Uri _url = Uri.parse(' https://halloflegends.online/');
+  final Uri _url = Uri.parse('https://halloflegends.online/');
 
   Future<void> _launchUrl() async {
     if (!await launchUrl(_url)) {
@@ -519,7 +519,7 @@ class _MainViewState extends ConsumerState<MainView> {
                                   setState(() {
                                     _isLoading = true;
                                   });
-                                  if (!_firstFormKey.currentState!.validate()) {
+                                  if (!_secondFormKey.currentState!.validate()) {
                                     Fluttertoast.showToast(
                                       msg: AppLocalizations.of(context)!
                                           .veuillezRemplirLesInformationsNecessaire,
@@ -652,60 +652,62 @@ class _MainViewState extends ConsumerState<MainView> {
         var brightness = MediaQuery.of(context).platformBrightness;
         bool isDarkMode = brightness == Brightness.dark;
 
-        return Container(
-            padding: EdgeInsets.symmetric(vertical: 84.h, horizontal: 32.w),
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(isDarkMode
-                      ? 'assets/images/dark_bg.jpg'
-                      : 'assets/images/light_bg.jpg'),
-                  fit: BoxFit.cover,
-                ),
-                border: Border.all(width: 0),
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(150.r),
-                    topRight: Radius.circular(150.r))),
-            height: MediaQuery.of(context).size.height * 0.6,
-            child: Column(
-              children: [
-                Text(
-                  AppLocalizations.of(context)!.politics,
-                  style: isDarkMode
-                      ? Style.gothamMedium.copyWith(
-                          color: Palette.white,
-                          fontSize: 74.sp,
-                          fontWeight: FontWeight.w600)
-                      : Style.primaryGothamMedium.copyWith(
-                          fontSize: 74.sp, fontWeight: FontWeight.w600),
-                ),
-                SizedBox(height: 42.h),
-                Text(
-                  AppLocalizations.of(context)!.politicsText,
-                  textAlign: TextAlign.center,
-                  style: (isDarkMode
-                          ? Style.whiteGothamMedium
-                          : Style.gothamMedium)
-                      .copyWith(height: 4.h),
-                ),
-                const Spacer(),
-                OutlinedButton(
-                    onPressed: () async {
-                      await _launchUrl();
-                    },
-                    style: OutlinedButton.styleFrom(
-                      backgroundColor: Palette.primary,
-                      shape: const StadiumBorder(),
-                      side: BorderSide.none,
-                      textStyle: Style.gothamMedium,
-                    ),
-                    child: Text(
-                      AppLocalizations.of(context)!.voirPlus,
-                      style: isDarkMode
-                          ? Style.whiteGothamMedium
-                          : Style.gothamMedium,
-                    ))
-              ],
-            ));
+        return SafeArea(
+          child: Container(
+              padding: EdgeInsets.symmetric(vertical: 100.h, horizontal: 32.w),
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(isDarkMode
+                        ? 'assets/images/dark_bg.jpg'
+                        : 'assets/images/light_bg.jpg'),
+                    fit: BoxFit.cover,
+                  ),
+                  border: Border.all(width: 0),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(150.r),
+                      topRight: Radius.circular(150.r))),
+              height: MediaQuery.of(context).size.height * 0.6,
+              child: Column(
+                children: [
+                  Text(
+                    AppLocalizations.of(context)!.politics,
+                    style: isDarkMode
+                        ? Style.gothamMedium.copyWith(
+                            color: Palette.white,
+                            fontSize: 74.sp,
+                            fontWeight: FontWeight.w600)
+                        : Style.primaryGothamMedium.copyWith(
+                            fontSize: 74.sp, fontWeight: FontWeight.w600),
+                  ),
+                  SizedBox(height: 42.h),
+                  Text(
+                    AppLocalizations.of(context)!.politicsText,
+                    textAlign: TextAlign.center,
+                    style: (isDarkMode
+                            ? Style.whiteGothamMedium
+                            : Style.gothamMedium)
+                        .copyWith(height: 4.h),
+                  ),
+                  const Spacer(),
+                  OutlinedButton(
+                      onPressed: () async {
+                        await _launchUrl();
+                      },
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor: Palette.primary,
+                        shape: const StadiumBorder(),
+                        side: BorderSide.none,
+                        textStyle: Style.gothamMedium,
+                      ),
+                      child: Text(
+                        AppLocalizations.of(context)!.voirPlus,
+                        style: isDarkMode
+                            ? Style.whiteGothamMedium
+                            : Style.gothamMedium,
+                      ))
+                ],
+              )),
+        );
       },
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
