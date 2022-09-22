@@ -198,7 +198,6 @@ class _MainViewState extends ConsumerState<MainView> {
                           SizedBox(width: 114.w),
                           DateField(
                             hint: AppLocalizations.of(context)!.mois,
-                            // value: moisNaissance,
                             items: months,
                             value: moisN,
                           ),
