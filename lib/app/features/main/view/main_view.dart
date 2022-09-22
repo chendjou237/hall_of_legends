@@ -41,6 +41,7 @@ class _MainViewState extends ConsumerState<MainView> {
     // init();
   }
 
+  final formKey = GlobalKey<FormState>();
   final Uri _url = Uri.parse('https://halloflegends.online/');
 
   Future<void> _launchUrl() async {
@@ -61,6 +62,7 @@ class _MainViewState extends ConsumerState<MainView> {
   String anneeDeces = "1943";
   String anneeEnregistrement = "1943";
   String pays = "";
+
   String link = "Famille";
   final nameController = TextEditingController();
 
@@ -80,18 +82,21 @@ class _MainViewState extends ConsumerState<MainView> {
 
   final countries = ['Cameroun', 'Gabon', 'Congo', 'Tchad', 'Tchad'];
 
-  final _firstFormKey = GlobalKey<FormState>();
-  final _secondFormKey = GlobalKey<FormState>();
-
   late PageController pageController;
 
   @override
   Widget build(BuildContext context) {
-    final liens = [AppLocalizations.of(context)!.famille, AppLocalizations.of(context)!.amicale, AppLocalizations.of(context)!.aucun];
+    final liens = [
+      AppLocalizations.of(context)!.famille,
+      AppLocalizations.of(context)!.amicale,
+      AppLocalizations.of(context)!.aucun
+    ];
+
     final database = ref.read(databaseProvider.state);
     var brightness = MediaQuery.of(context).platformBrightness;
     bool isDarkMode = brightness == Brightness.dark;
     final jourD = ref.watch(jourDProvider.notifier);
+    final key = ref.watch(formKeyProvider.notifier);
     final moisD = ref.watch(moisDProvider.notifier);
     final anneeD = ref.watch(anneeDProvider.notifier);
     final jourN = ref.watch(jourNProvider.notifier);
@@ -99,7 +104,9 @@ class _MainViewState extends ConsumerState<MainView> {
     final anneeN = ref.watch(anneeNProvider.notifier);
     final jourE = ref.watch(jourEProvider.notifier);
     final moisE = ref.watch(moisEProvider.notifier);
+    final linkP = ref.watch(linkProvider.notifier);
     final anneeE = ref.watch(anneeEProvider.notifier);
+
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,
@@ -114,166 +121,143 @@ class _MainViewState extends ConsumerState<MainView> {
         ),
         padding: EdgeInsets.fromLTRB(93.w, 130.h, 93.w, 30.h),
         child: PageView(
-          physics: const NeverScrollableScrollPhysics(),
           controller: pageController,
           children: [
-            GestureDetector(
-              onHorizontalDragStart: (drag) {
-                if (_firstFormKey.currentState!.validate()) {
-                  pageController.nextPage(
-                      duration: const Duration(seconds: 1),
-                      curve: Curves.easeIn);
-                } else {
-                  //TODO: loc
-                  Fluttertoast.showToast(
-                      msg: "please field required field",
-                      backgroundColor: Colors.red);
-                }
-              },
-              child: SingleChildScrollView(
-                child: Form(
-                  key: _firstFormKey,
-                  autovalidateMode: AutovalidateMode.always,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+            SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Image.asset(
+                        'assets/images/logo_Hall-Of-Legends-foundation-white.png',
+                        width: 584.23.w,
+                        height: 243.h),
+                  ),
+                  SizedBox(height: 139.h),
+                  Center(
+                    child: Container(
+                      alignment: Alignment.center,
+                      width: 942.w,
+                      height: 117.h,
+                      decoration: BoxDecoration(
+                        color: isDarkMode ? Palette.primary : Palette.black,
+                      ),
+                      child: Text(
+                        AppLocalizations.of(context)!.formulaireDeNomination,
+                        style: isDarkMode
+                            ? Style.gothamMedium
+                            : Style.primaryGothamMedium,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 124.h,
+                  ),
+                  MainField(
+                    title: AppLocalizations.of(context)!.nomDuCandidat,
+                    hint: AppLocalizations.of(context)!.nomsEtPrenoms,
+                    controller: nameController,
+                  ),
+                  SizedBox(height: 74.8.h),
+                  MainField(
+                    hint: AppLocalizations.of(context)!
+                        .selectionnerLeDomaineDeRealisation,
+                    title: AppLocalizations.of(context)!.titreOuProfession,
+                    controller: titleController,
+                  ),
+                  SizedBox(
+                    height: 109.h,
+                  ),
+                  Text(AppLocalizations.of(context)!.dateDeNaissanceDuCandidat,
+                      style: isDarkMode
+                          ? Style.whiteGothamMedium
+                          : Style.gothamMedium),
+                  SizedBox(
+                    height: 17.h,
+                  ),
+                  Row(
                     children: [
-                      Center(
-                        child: Image.asset(
-                            'assets/images/logo_Hall-Of-Legends-foundation-white.png',
-                            width: 584.23.w,
-                            height: 243.h),
+                      DateField(
+                        hint: AppLocalizations.of(context)!.jour,
+                        items: days,
+                        value: jourN,
                       ),
-                      SizedBox(height: 139.h),
-                      Center(
-                        child: Container(
-                          alignment: Alignment.center,
-                          width: 942.w,
-                          height: 117.h,
-                          decoration: BoxDecoration(
-                            color: isDarkMode ? Palette.primary : Palette.black,
-                          ),
-                          child: Text(
-                            AppLocalizations.of(context)!
-                                .formulaireDeNomination,
-                            style: isDarkMode
-                                ? Style.gothamMedium
-                                : Style.primaryGothamMedium,
-                          ),
-                        ),
+                      SizedBox(width: 114.w),
+                      DateField(
+                        hint: AppLocalizations.of(context)!.mois,
+                        items: months,
+                        value: moisN,
                       ),
-                      SizedBox(
-                        height: 124.h,
+                      SizedBox(width: 93.4.w),
+                      DateField(
+                        hint: AppLocalizations.of(context)!.annee,
+                        items: years,
+                        value: anneeN,
                       ),
-                      MainField(
-                        title: AppLocalizations.of(context)!.nomDuCandidat,
-                        hint: AppLocalizations.of(context)!.nomsEtPrenoms,
-                        controller: nameController,
-                      ),
-                      SizedBox(height: 74.8.h),
-                      MainField(
-                        hint: AppLocalizations.of(context)!
-                            .selectionnerLeDomaineDeRealisation,
-                        title: AppLocalizations.of(context)!.titreOuProfession,
-                        controller: titleController,
-                      ),
-                      SizedBox(
-                        height: 109.h,
-                      ),
-                      Text(
-                          AppLocalizations.of(context)!
-                              .dateDeNaissanceDuCandidat,
-                          style: isDarkMode
-                              ? Style.whiteGothamMedium
-                              : Style.gothamMedium),
-                      SizedBox(
-                        height: 17.h,
-                      ),
-                      Row(
-                        children: [
-                          DateField(
-                            hint: AppLocalizations.of(context)!.jour,
-                            items: days,
-                            value: jourN,
-                          ),
-                          SizedBox(width: 114.w),
-                          DateField(
-                            hint: AppLocalizations.of(context)!.mois,
-                            items: months,
-                            value: moisN,
-                          ),
-                          SizedBox(width: 93.4.w),
-                          DateField(
-                            hint: AppLocalizations.of(context)!.annee,
-                            items: years,
-                            value: anneeN,
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 109.h),
-                      Text(
-                          AppLocalizations.of(context)!
-                              .dateDeDecesDuCandidatLeCasEcheant,
-                          style: isDarkMode
-                              ? Style.whiteGothamMedium
-                              : Style.gothamMedium),
-                      SizedBox(height: 18.h),
-                      Row(
-                        children: [
-                          DateField(
-                            hint: AppLocalizations.of(context)!.jour,
-                            items: days,
-                            value: jourD,
-                          ),
-                          SizedBox(width: 114.w),
-                          DateField(
-                            hint: AppLocalizations.of(context)!.mois,
-                            items: months,
-                            value: moisD,
-                          ),
-                          SizedBox(width: 93.4.w),
-                          DateField(
-                            hint: AppLocalizations.of(context)!.annee,
-                            items: years,
-                            value: anneeD,
-                          )
-                        ],
-                      ),
-                      SizedBox(height: 86.h),
-                      Text(AppLocalizations.of(context)!.biographieDuCandidat,
-                          style: isDarkMode
-                              ? Style.whiteGothamMedium
-                              : Style.gothamMedium),
-                      SizedBox(height: 12.h),
-                      Container(
-                        width: 1090.34.w,
-                        height: 685.44.h,
-                        padding: EdgeInsets.symmetric(horizontal: 21.w),
-                        decoration: BoxDecoration(
-                          color:
-                              isDarkMode ? Palette.dark : Palette.lightPrimary,
-                          borderRadius: BorderRadius.circular(32.34.r),
-                          border: Border.all(color: Palette.primary),
-                        ),
-                        child: TextFormField(
-                          controller: bioController,
-                          keyboardType: TextInputType.multiline,
-                          maxLines: null,
-                          style: (isDarkMode
-                                  ? Style.whiteGothamLight
-                                  : Style.darkGothamLight)
-                              .copyWith(height: 4.h),
-                          cursorColor:
-                              isDarkMode ? Palette.hintColor : Palette.dark,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            focusColor: Palette.hintColor,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 86.h),
                     ],
                   ),
-                ),
+                  SizedBox(height: 109.h),
+                  Text(
+                      AppLocalizations.of(context)!
+                          .dateDeDecesDuCandidatLeCasEcheant,
+                      style: isDarkMode
+                          ? Style.whiteGothamMedium
+                          : Style.gothamMedium),
+                  SizedBox(height: 18.h),
+                  Row(
+                    children: [
+                      DateField(
+                        hint: AppLocalizations.of(context)!.jour,
+                        items: days,
+                        value: jourD,
+                      ),
+                      SizedBox(width: 114.w),
+                      DateField(
+                        hint: AppLocalizations.of(context)!.mois,
+                        items: months,
+                        value: moisD,
+                      ),
+                      SizedBox(width: 93.4.w),
+                      DateField(
+                        hint: AppLocalizations.of(context)!.annee,
+                        items: years,
+                        value: anneeD,
+                      )
+                    ],
+                  ),
+                  SizedBox(height: 86.h),
+                  Text(AppLocalizations.of(context)!.biographieDuCandidat,
+                      style: isDarkMode
+                          ? Style.whiteGothamMedium
+                          : Style.gothamMedium),
+                  SizedBox(height: 12.h),
+                  Container(
+                    width: 1090.34.w,
+                    height: 685.44.h,
+                    padding: EdgeInsets.symmetric(horizontal: 21.w),
+                    decoration: BoxDecoration(
+                      color: isDarkMode ? Palette.dark : Palette.lightPrimary,
+                      borderRadius: BorderRadius.circular(32.34.r),
+                      border: Border.all(color: Palette.primary),
+                    ),
+                    child: TextFormField(
+                      controller: bioController,
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
+                      style: (isDarkMode
+                              ? Style.whiteGothamLight
+                              : Style.darkGothamLight)
+                          .copyWith(height: 4.h),
+                      cursorColor:
+                          isDarkMode ? Palette.hintColor : Palette.dark,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        focusColor: Palette.hintColor,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 86.h),
+                ],
               ),
             ),
             GestureDetector(
@@ -283,7 +267,7 @@ class _MainViewState extends ConsumerState<MainView> {
               },
               child: SingleChildScrollView(
                 child: Form(
-                  key: _secondFormKey,
+                  key: formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -336,6 +320,7 @@ class _MainViewState extends ConsumerState<MainView> {
                       ),
                       HallDropDown(
                         items: liens,
+                        value: linkP,
                         hint: AppLocalizations.of(context)!
                             .selectionnerVotreLienAvecLeCandidat,
                       ),
@@ -449,9 +434,7 @@ class _MainViewState extends ConsumerState<MainView> {
                           showDropdownIcon: false,
                           controller: confirmTelController,
                           validator: (value) {
-                            setState(() {
-                              
-                            });
+                            setState(() {});
                             if (value == null) {
                               return AppLocalizations.of(context)!
                                   .veuillezEntrerDesValeurs;
@@ -492,7 +475,8 @@ class _MainViewState extends ConsumerState<MainView> {
                           hint: AppLocalizations.of(context)!
                               .veuillezEntrerVotreAdresseEmail,
                           controller: emailController,
-                          validator:  IsEmail(AppLocalizations.of(context)!.emailError),
+                          validator:
+                              IsEmail(AppLocalizations.of(context)!.emailError),
                           title: AppLocalizations.of(context)!.adresseEmail),
                       SizedBox(
                         height: 40.h,
@@ -518,12 +502,39 @@ class _MainViewState extends ConsumerState<MainView> {
                                   setState(() {
                                     _isLoading = true;
                                   });
-                                  if (!_secondFormKey.currentState!.validate()) {
+                                  if (nameController.text.isEmpty ||
+                                      titleController.text.isEmpty ||
+                                      bioController.text.isEmpty) {
+                                    Fluttertoast.showToast(
+                                      msg: AppLocalizations.of(context)!
+                                          .veuillezRemplirLesInformationsNecessaire,
+                                    );
+                                    setState(() {
+                                      _isLoading = false;
+                                    });
+                                    return;
+                                  }
+                                  if (telController.text !=
+                                      confirmTelController.text) {
+                                    Fluttertoast.showToast(
+                                        msg: AppLocalizations.of(context)!
+                                            .lesDeuxNumerosNeCorrespondentPas,
+                                        backgroundColor: Palette.failed);
+                                    setState(() {
+                                      _isLoading = false;
+                                    });
+                                    return;
+                                  }
+                                  if (!formKey.currentState!.validate()) {
                                     Fluttertoast.showToast(
                                       msg: AppLocalizations.of(context)!
                                           .veuillezRemplirLesInformationsNecessaire,
                                       backgroundColor: Palette.failed,
                                     );
+                                    setState(() {
+                                      _isLoading = false;
+                                    });
+                                    return;
                                   } else {
                                     Fluttertoast.showToast(
                                       msg: AppLocalizations.of(context)!
@@ -552,6 +563,7 @@ class _MainViewState extends ConsumerState<MainView> {
                                         pays: pays,
                                         numeroDeTelephone: telController.text,
                                         email: emailController.text);
+                                    print(model.toString());
                                     if (await database.state
                                         .createForm(model)) {
                                       AwesomeDialog(

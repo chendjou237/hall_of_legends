@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/theme/theme.dart';
 
@@ -7,13 +8,13 @@ class HallDropDown extends StatefulWidget {
   HallDropDown({
     Key? key,
     required this.items,
-    
+    required this.value,
     required this.hint,
   }) : super(key: key);
 
   final List<String> items;
   final String hint;
-  String? value;
+  StateController<String?>? value;
 
   @override
   State<HallDropDown> createState() => _HallDropDownState();
@@ -37,7 +38,7 @@ class _HallDropDownState extends State<HallDropDown> {
             widget.hint,
             style: Style.gothamLight,
           ),
-          value: widget.value,
+          value: widget.value!.state,
           dropdownColor: isDarkMode ? Palette.dark : Palette.white,
           items: widget.items
               .map((l) => DropdownMenuItem(
@@ -52,7 +53,7 @@ class _HallDropDownState extends State<HallDropDown> {
               .toList(),
           onChanged: (val) {
             setState(() {
-              widget.value = val.toString();
+              widget.value!.state = val.toString();
             });
           }),
     );
