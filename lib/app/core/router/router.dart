@@ -12,12 +12,12 @@ final routerProvider = Provider<GoRouter>(
     return GoRouter(
       // TODO: add your router here
       routes: [
-        /// for showing onboarding
-        // GoRoute(
-        //     path: SplashView.routeName,
-        //     builder: (context, state) => const SplashView()),
+        // / for showing onboarding/
         GoRoute(
-          path: SplashView.routeName,
+            path: SplashView.routeName,
+            builder: (context, state) => const SplashView()),
+        GoRoute(
+          path: MainView.routeName,
           builder: (context, state) => const MainView(),
         ),
       ],
