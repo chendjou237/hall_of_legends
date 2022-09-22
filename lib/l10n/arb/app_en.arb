@@ -27,18 +27,18 @@
   "veuillezConfirmerVotreAdresseEmail": "Please confirm your email address",
   "enregistrerEtEnvoyer": "SAVE AND SEND",
   "vosResponseOntBienEteEnregistrer": "Your answers have been saved",
-  "felicitation": "Felicitation",
+  "felicitation": "Congratulations",
   "pleaseFillInTheNecessaryInformation":"Please fill in the necessary information",
   "verifieAvecSucces":"Verified successfully",
   "lesDeuxNumerosNeCorrespondentPas":"The two numbers do not match",
   "veuillezEntrerDesValeurs":"Please enter values",
-  "politics":"politique de confidenialité",
+  "politics":"privacy policy",
   "politicsText":"The Hall of Legends respects the confidentiality of personal data. We will comply with the Personal Data (Privacy) Ordinance General Data Protection Regulation EU 2016/679 (“The Regulation”) and are committed to fully implementing the data protection principles promulgated under of the Regulations. From time to time, we may collect various types of personal information (“Personal Information” or “Personal Data”) (such as email address, name, and phone number) from you as part of our provision of services, activities and facilities, including but not limited to account registration, ticketing transaction, email newsletter subscription, event registration , membership, payment, following up on inquiries, conducting customer surveys, booking venues, fundraising, applying for a job and/or employment-related issues, managing funds -contractors, etc. A parent or guardian must consent to our collection and use of personal data of minors under the age of 18.",
   "voirPlus": "See More",
   "famille": "Family",
   "amicale": "Friend",
   "aucun": "None",
-  "emailError": "Email address does not match"
-
+  "emailError": "Email address does not match",
+  "veuillezRemplirLesInformationsNecessaire":"Please fill in the necessary information"
 
 }
