@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hall_of_fame/app/features/main/model/main_model.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

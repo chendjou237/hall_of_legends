@@ -9,7 +9,51 @@
       "client_info": {
         "mobilesdk_app_id": "1:592184472687:android:112babc8c02d794600899a",
         "android_client_info": {
-          "package_name": "com.example.hof"
+          "package_name": "com.example.hall_of_legends"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "592184472687-1tb9phdgh24dabukepia81f4qatek2c8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.hall_of_legends",
+            "certificate_hash": "7a6d0734bc8f6393ca71459c3505a1f507c96819"
+          }
+        },
+        {
+          "client_id": "592184472687-54f6e83047hnnp76g8pejj0j8lr0m125.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTiEatQYdU9ELtCdjKVAhsIk9YhwgLsUk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "592184472687-54f6e83047hnnp76g8pejj0j8lr0m125.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "592184472687-bucofgmfb7dqemof26tsi3tuh0p43vvk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.hallOfLegends"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:592184472687:android:14a47e082c9fc56500899a",
+        "android_client_info": {
+          "package_name": "holoflegends.android.com"
         }
       },
       "oauth_client": [
@@ -34,7 +78,7 @@
               "client_id": "592184472687-bucofgmfb7dqemof26tsi3tuh0p43vvk.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.hof"
+                "bundle_id": "com.example.hallOfLegends"
               }
             }
           ]

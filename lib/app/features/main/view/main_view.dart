@@ -1,5 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:country_pickers/country_picker_dropdown.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -563,7 +564,9 @@ class _MainViewState extends ConsumerState<MainView> {
                                         pays: pays,
                                         numeroDeTelephone: telController.text,
                                         email: emailController.text);
-                                    print(model.toString());
+                                    if (kDebugMode) {
+                                      print(model.toString());
+                                    }
                                     if (await database.state
                                         .createForm(model)) {
                                       AwesomeDialog(

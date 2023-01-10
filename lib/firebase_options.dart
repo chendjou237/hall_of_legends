@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBTiEatQYdU9ELtCdjKVAhsIk9YhwgLsUk',
-    appId: '1:592184472687:android:112babc8c02d794600899a',
+    appId: '1:592184472687:android:14a47e082c9fc56500899a',
     messagingSenderId: '592184472687',
     projectId: 'hall-of-legends',
     storageBucket: 'hall-of-legends.appspot.com',
@@ -59,11 +59,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyB0RGuTqlULKjw7bhfoxKWl6RTv4hn0004',
-    appId: '1:592184472687:ios:7fabdefd8acff20700899a',
+    appId: '1:592184472687:ios:47b54380e75c47cb00899a',
     messagingSenderId: '592184472687',
     projectId: 'hall-of-legends',
     storageBucket: 'hall-of-legends.appspot.com',
-    iosClientId: '592184472687-bucofgmfb7dqemof26tsi3tuh0p43vvk.apps.googleusercontent.com',
-    iosBundleId: 'com.example.hallOfLegends',
+    androidClientId: '592184472687-1tb9phdgh24dabukepia81f4qatek2c8.apps.googleusercontent.com',
+    iosClientId: '592184472687-lde5tu5b0g9p6hlo7sgsilta9c9uptjr.apps.googleusercontent.com',
+    iosBundleId: 'com.example.hof',
   );
 }

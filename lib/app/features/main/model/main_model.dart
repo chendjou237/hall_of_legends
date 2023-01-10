@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MainModel {
-  // TODO: add your model here
   String noms;
   String profession;
   DateTime dateDeNaissance;
